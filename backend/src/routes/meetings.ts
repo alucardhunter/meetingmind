@@ -10,7 +10,7 @@ import { summarizeMeeting, getSummary, extractCommitments } from '../services/ex
 const router = Router();
 
 const uploadDir = process.env.UPLOAD_DIR || './uploads';
-const backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3001}`;
+const backendUrl = (process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3001}`).replace(/\/$/, '');
 const maxFileSize = parseInt(process.env.MAX_FILE_SIZE || '52428800', 10);
 
 const storage = multer.diskStorage({
@@ -28,7 +28,11 @@ const storage = multer.diskStorage({
 function resolveAudioUrl(audioUrl: string | null): string | null {
   if (!audioUrl) return null;
   if (audioUrl.startsWith('http') || audioUrl.startsWith('blob:')) return audioUrl;
-  return `${backendUrl}${audioUrl}`;
+  // Normalize path: remove leading ./ if present
+  const normalizedPath = audioUrl.replace(/^\.\//, '/');
+  // Ensure leading slash
+  const cleanPath = normalizedPath.startsWith('/') ? normalizedPath : `/${normalizedPath}`;
+  return `${backendUrl}${cleanPath}`;
 }
 
 // Map DB meeting to API response shape (meetingDate -> date, resolve audio)
