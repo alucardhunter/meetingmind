@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import { Prisma } from '@prisma/client';
@@ -10,6 +10,7 @@ import { summarizeMeeting, getSummary, extractCommitments } from '../services/ex
 const router = Router();
 
 const uploadDir = process.env.UPLOAD_DIR || './uploads';
+const backendUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3001}`;
 const maxFileSize = parseInt(process.env.MAX_FILE_SIZE || '52428800', 10);
 
 const storage = multer.diskStorage({
@@ -22,6 +23,22 @@ const storage = multer.diskStorage({
     cb(null, `audio-${uniqueSuffix}${ext}`);
   },
 });
+
+// Resolve audioUrl to full URL for frontend consumption
+function resolveAudioUrl(audioUrl: string | null): string | null {
+  if (!audioUrl) return null;
+  if (audioUrl.startsWith('http') || audioUrl.startsWith('blob:')) return audioUrl;
+  return `${backendUrl}${audioUrl}`;
+}
+
+// Map DB meeting to API response shape (meetingDate -> date, resolve audio)
+function mapMeetingResponse(meeting: any): any {
+  return {
+    ...meeting,
+    date: meeting.meetingDate ?? meeting.date ?? null,
+    audioUrl: resolveAudioUrl(meeting.audioUrl),
+  };
+}
 
 const fileFilter = (
   _req: any,
@@ -113,7 +130,7 @@ router.get('/', async (req: AuthRequest, res: Response) => {
           client: meeting.client,
           meetingDate: meeting.meetingDate,
           status: meeting.status,
-          audioUrl: meeting.audioUrl,
+          audioUrl: resolveAudioUrl(meeting.audioUrl),
           createdAt: meeting.createdAt,
           _count: meeting._count,
           openCommitments,
@@ -153,7 +170,7 @@ router.post('/', upload.single('audio'), async (req: AuthRequest, res: Response)
       },
     });
 
-    res.status(201).json({ meeting });
+    res.status(201).json({ meeting: mapMeetingResponse(meeting) });
   } catch (error) {
     console.error('Create meeting error:', error);
     res.status(500).json({ error: 'Failed to create meeting' });
@@ -189,10 +206,10 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
     }));
 
     res.json({
-      meeting: {
+      meeting: mapMeetingResponse({
         ...meeting,
         commitments: commitmentsWithOverdue,
-      },
+      }),
     });
   } catch (error) {
     console.error('Get meeting error:', error);
