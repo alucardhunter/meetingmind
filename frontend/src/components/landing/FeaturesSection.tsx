@@ -26,7 +26,6 @@ export function FeaturesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {featureKeys.map((key) => {
             const Icon = icons[key];
-            const feature = t(`landing.features.${key}`) as unknown as { title: string; description: string };
             return (
               <div
                 key={key}
@@ -35,8 +34,8 @@ export function FeaturesSection() {
                 <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 transition-colors duration-300">
                   <Icon className="w-6 h-6 text-indigo-600 group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-slate-900 mb-3">{t(`landing.features.${key}.title`)}</h3>
+                <p className="text-slate-600 leading-relaxed">{t(`landing.features.${key}.description`)}</p>
               </div>
             );
           })}
