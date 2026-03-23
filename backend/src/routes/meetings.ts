@@ -154,7 +154,8 @@ router.get('/', async (req: AuthRequest, res: Response) => {
 router.post('/', upload.single('audio'), async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId;
-    const { title, meetingDate, client } = req.body;
+    // Accept both date/meetingDate and contact/client from frontend
+    const { title, date, meetingDate, contact, client } = req.body;
 
     if (!title) {
       res.status(400).json({ error: 'Title is required' });
@@ -162,13 +163,15 @@ router.post('/', upload.single('audio'), async (req: AuthRequest, res: Response)
     }
 
     const audioUrl = req.file ? path.join(uploadDir, req.file.filename) : null;
+    const parsedDate = date || meetingDate;
+    const parsedClient = contact || client;
 
     const meeting = await prisma.meeting.create({
       data: {
         userId: userId!,
         title,
-        client: client || null,
-        meetingDate: meetingDate ? new Date(meetingDate) : null,
+        client: parsedClient || null,
+        meetingDate: parsedDate ? new Date(parsedDate) : null,
         audioUrl,
         status: audioUrl ? 'pending' : 'pending_no_audio',
       },
