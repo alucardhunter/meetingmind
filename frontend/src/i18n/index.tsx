@@ -5,7 +5,7 @@ import { enUS } from './en-US';
 
 type TranslationDict = typeof enUS;
 
-const translations: Record<string, TranslationDict> = {
+export const translations: Record<string, TranslationDict> = {
   'en-US': enUS,
   'pt-BR': {
     ...enUS,
