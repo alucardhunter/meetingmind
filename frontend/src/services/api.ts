@@ -9,7 +9,7 @@ import type {
   CommitmentFilters,
 } from '@/types';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 const client = axios.create({
   baseURL: API_URL,
@@ -57,17 +57,17 @@ export const getMe = async (): Promise<User> => {
 
 // Meetings
 export const getMeetings = async (): Promise<Meeting[]> => {
-  const { data } = await client.get<Meeting[]>('/meetings');
-  return data;
+  const { data } = await client.get<{ meetings: Meeting[] }>('/meetings');
+  return data.meetings;
 };
 
 export const getMeeting = async (id: string): Promise<Meeting> => {
-  const { data } = await client.get<Meeting>(`/meetings/${id}`);
-  return data;
+  const { data } = await client.get<{ meeting: Meeting }>(`/meetings/${id}`);
+  return data.meeting;
 };
 
 export const createMeeting = async (formData: FormData): Promise<Meeting> => {
-  const { data } = await client.post<Meeting>('/meetings', formData, {
+  const { data } = await client.post<{ meeting: Meeting }>('/meetings', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
     onUploadProgress: (progressEvent) => {
       const percentage = progressEvent.total
@@ -76,7 +76,7 @@ export const createMeeting = async (formData: FormData): Promise<Meeting> => {
       console.log(`Upload progress: ${percentage}%`);
     },
   });
-  return data;
+  return data.meeting;
 };
 
 export const deleteMeeting = async (id: string): Promise<void> => {
@@ -96,16 +96,16 @@ export const getCommitments = async (filters?: CommitmentFilters): Promise<Commi
   if (filters?.dateFrom) params.set('dateFrom', filters.dateFrom);
   if (filters?.dateTo) params.set('dateTo', filters.dateTo);
   if (filters?.sortBy) params.set('sortBy', filters.sortBy);
-  const { data } = await client.get<Commitment[]>(`/commitments?${params.toString()}`);
-  return data;
+  const { data } = await client.get<{ commitments: Commitment[] }>(`/commitments?${params.toString()}`);
+  return data.commitments;
 };
 
 export const updateCommitment = async (
   id: string,
   updates: { status?: string; text?: string; deadline?: string }
 ): Promise<Commitment> => {
-  const { data } = await client.patch<Commitment>(`/commitments/${id}`, updates);
-  return data;
+  const { data } = await client.patch<{ commitment: Commitment }>(`/commitments/${id}`, updates);
+  return data.commitment;
 };
 
 export const getCommitmentStats = async (): Promise<{

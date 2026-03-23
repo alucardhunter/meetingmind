@@ -7,6 +7,8 @@ import authRoutes from './routes/auth';
 import meetingsRoutes from './routes/meetings';
 import commitmentsRoutes from './routes/commitments';
 import exportRoutes from './routes/export';
+import settingsRoutes from './routes/settings';
+import statsRoutes from './routes/stats';
 
 dotenv.config();
 
@@ -23,10 +25,12 @@ app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/meetings', meetingsRoutes);
-app.use('/api/meetings', exportRoutes);
-app.use('/api/commitments', commitmentsRoutes);
+app.use('/auth', authRoutes);
+app.use('/meetings', meetingsRoutes);
+app.use('/meetings', statsRoutes);
+app.use('/meetings', exportRoutes);
+app.use('/commitments', commitmentsRoutes);
+app.use('/settings', settingsRoutes);
 
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ error: 'Route not found' });

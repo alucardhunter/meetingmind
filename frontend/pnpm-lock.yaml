@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      autoprefixer:
-        specifier: ^10.4.27
-        version: 10.4.27(postcss@8.5.8)
       axios:
         specifier: ^1.13.6
         version: 1.13.6
@@ -48,6 +45,9 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.3.7(@types/react@18.3.28)
+      autoprefixer:
+        specifier: ^10.4.27
+        version: 10.4.27(postcss@8.5.8)
       eslint:
         specifier: ^8
         version: 8.57.1

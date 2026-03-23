@@ -67,14 +67,26 @@ router.get('/', async (req: AuthRequest, res: Response) => {
       },
       orderBy: { createdAt: 'desc' },
     });
-
-    // Add overdue status based on deadline
-    const commitmentsWithStatus = commitments.map((c) => ({
-      ...c,
+    // Add meeting info at top level for frontend compatibility
+    const commitmentsWithMeetingInfo = commitments.map((c) => ({
+      id: c.id,
+      text: c.text,
+      status: c.status,
+      deadline: c.deadline?.toISOString() || null,
+      amountValue: c.amountValue?.toString() || null,
+      amountCurrency: c.amountCurrency,
+      owner: c.owner,
+      createdAt: c.createdAt.toISOString(),
+      fulfilledAt: c.fulfilledAt?.toISOString() || null,
       isOverdue: c.deadline && c.deadline < new Date() && c.status === 'open',
+      meetingId: c.meeting.id,
+      meetingTitle: c.meeting.title,
+      meetingDate: c.meeting.meetingDate?.toISOString() || null,
+      contact: c.meeting.client || null,
     }));
 
-    res.json({ commitments: commitmentsWithStatus });
+    res.json({ commitments: commitmentsWithMeetingInfo });
+    res.json({ commitments: commitmentsWithMeetingInfo });
   } catch (error) {
     console.error('List commitments error:', error);
     res.status(500).json({ error: 'Failed to list commitments' });
