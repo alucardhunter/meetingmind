@@ -19,4 +19,5 @@ EXPOSE 3001
 ENV NODE_ENV=development
 ENV PORT=3001
 
-CMD ["npm", "run", "dev"]
+# Run db push (sync schema) and start server
+CMD ["sh", "-c", "npx prisma db push && npm run dev"]
