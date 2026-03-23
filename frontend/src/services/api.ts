@@ -60,8 +60,8 @@ export const signup = async (email: string, password: string, name: string): Pro
 };
 
 export const getMe = async (): Promise<User> => {
-  const { data } = await client.get<User>('/auth/me');
-  return data;
+  const { data } = await client.get<{ user: User }>('/auth/me');
+  return data.user;
 };
 
 // Meetings
