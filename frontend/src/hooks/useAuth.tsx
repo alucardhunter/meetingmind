@@ -15,32 +15,44 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Restore user synchronously from localStorage on mount
+function getStoredUser(): User | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const stored = localStorage.getItem('user');
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+}
+
+function getStoredToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('token');
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Initialize user SYNCHRONOUSLY from localStorage — no flash on refresh
+  const [user, setUser] = useState<User | null>(() => getStoredUser());
+  const [loading, setLoading] = useState(true); // Start loading=true until we verify
 
   const checkAuth = useCallback(async () => {
-    const token = localStorage.getItem('token');
+    const token = getStoredToken();
     if (!token) {
+      setUser(null);
       setLoading(false);
       return;
     }
-    // Try to restore user from localStorage first
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        // Invalid JSON, will refetch
-      }
-    }
+
     try {
       const userData = await getMe();
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
     } catch {
+      // Token invalid — clear everything
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      setUser(null);
     } finally {
       setLoading(false);
     }
