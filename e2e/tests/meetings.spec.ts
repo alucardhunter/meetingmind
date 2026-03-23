@@ -6,14 +6,9 @@ test.describe('Meetings', () => {
   test.beforeEach(async ({ page }) => {
     // Login before each test
     await page.goto(`${BASE_URL}/login`);
-    const emailInput = page.locator('input[type="email"], input[name="email"]').first();
-    const passwordInput = page.locator('input[type="password"]').first();
-    const submitButton = page.locator('button[type="submit"]').first();
-    
-    await emailInput.fill(`e2e.test@meetingmind.com`);
-    await passwordInput.fill('TestPassword123!');
-    await submitButton.click();
-    
+    await page.getByRole('textbox', { name: /email/i }).fill(`e2e.test@meetingmind.com`);
+    await page.locator('input[type="password"]').fill('TestPassword123!');
+    await page.locator('button[type="submit"]').click();
     await page.waitForLoadState('networkidle');
   });
 
@@ -21,9 +16,8 @@ test.describe('Meetings', () => {
     await page.goto(`${BASE_URL}/meetings/new`);
     await expect(page).toHaveURL(/\/meetings\/new/);
     
-    // Check for upload form elements
-    const uploadArea = page.locator('input[type="file"], [data-testid*="upload"], [class*="upload"]').first();
-    await expect(uploadArea).toBeVisible({ timeout: 5000 });
+    // Check for upload heading
+    await expect(page.getByRole('heading', { name: /upload/i })).toBeVisible({ timeout: 5000 });
   });
 
   test('meeting list page loads', async ({ page }) => {
@@ -35,7 +29,6 @@ test.describe('Meetings', () => {
   });
 
   test('meeting detail page loads', async ({ page }) => {
-    // First get a meeting ID from the list or use a placeholder
     await page.goto(`${BASE_URL}/meetings`);
     await page.waitForLoadState('networkidle');
     
@@ -48,7 +41,6 @@ test.describe('Meetings', () => {
     } else {
       // Otherwise test direct navigation with placeholder ID
       await page.goto(`${BASE_URL}/meetings/test-meeting-id`);
-      // Should handle 404 gracefully or show empty state
       const bodyText = await page.locator('body').textContent();
       expect(bodyText).toBeTruthy();
     }
@@ -58,7 +50,7 @@ test.describe('Meetings', () => {
     await page.goto(`${BASE_URL}/meetings`);
     
     // Look for "New Meeting" or upload button
-    const newMeetingBtn = page.locator('a[href*="/meetings/new"], button:has-text("new"), button:has-text("upload")').first();
+    const newMeetingBtn = page.locator('a[href*="/meetings/new"]').first();
     
     if (await newMeetingBtn.count() > 0) {
       await newMeetingBtn.click();

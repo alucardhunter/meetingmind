@@ -3,33 +3,39 @@ import { test, expect } from '@playwright/test';
 const BASE_URL = process.env.E2E_BASE_URL || 'http://localhost:3000';
 
 test.describe('Theme Toggle', () => {
-  test('theme toggle button exists', async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard`);
+  test('theme toggle button exists on dashboard', async ({ page }) => {
+    // Login first
+    await page.goto(`${BASE_URL}/login`);
+    await page.getByRole('textbox', { name: /email/i }).fill('e2e.test@meetingmind.com');
+    await page.locator('input[type="password"]').fill('TestPassword123!');
+    await page.locator('button[type="submit"]').click();
+    await page.waitForURL(/\/dashboard/, { timeout: 10000 }).catch(() => {});
     
-    // Look for theme toggle button/switch
-    const themeToggle = page.locator('[data-testid*="theme"], button:has-text("theme"), [class*="theme"], [aria-label*="theme"], button:has-text("🌙"), button:has-text("☀️")').first();
-    
+    // Look for theme toggle button with aria-label containing "Switch to"
+    const themeToggle = page.locator('button[aria-label*="Switch to"]');
     await expect(themeToggle).toBeVisible({ timeout: 5000 });
   });
 
   test('theme toggle works', async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard`);
+    // Login first
+    await page.goto(`${BASE_URL}/login`);
+    await page.getByRole('textbox', { name: /email/i }).fill('e2e.test@meetingmind.com');
+    await page.locator('input[type="password"]').fill('TestPassword123!');
+    await page.locator('button[type="submit"]').click();
+    await page.waitForURL(/\/dashboard/, { timeout: 10000 }).catch(() => {});
     
-    // Find theme toggle
-    const themeToggle = page.locator('[data-testid*="theme"], button:has-text("theme"), [class*="theme"], [aria-label*="theme"], button:has-text("🌙"), button:has-text("☀️")').first();
-    
-    // Get initial theme state (check html class or localStorage)
+    // Get initial theme state
     const getTheme = async () => {
-      const isDark = await page.evaluate(() => {
+      return page.evaluate(() => {
         const html = document.documentElement;
-        return html.classList.contains('dark') || localStorage.getItem('meetingmind-theme') === 'dark';
+        return (html.classList.contains('dark') || localStorage.getItem('meetingmind-theme') === 'dark') ? 'dark' : 'light';
       });
-      return isDark ? 'dark' : 'light';
     };
     
     const initialTheme = await getTheme();
     
     // Click toggle
+    const themeToggle = page.locator('button[aria-label*="Switch to"]');
     await themeToggle.click();
     await page.waitForTimeout(500);
     
@@ -39,19 +45,22 @@ test.describe('Theme Toggle', () => {
   });
 
   test('theme persists on page reload', async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard`);
-    
-    // Find and click theme toggle
-    const themeToggle = page.locator('[data-testid*="theme"], button:has-text("theme"), [class*="theme"], [aria-label*="theme"], button:has-text("🌙"), button:has-text("☀️")').first();
+    // Login first
+    await page.goto(`${BASE_URL}/login`);
+    await page.getByRole('textbox', { name: /email/i }).fill('e2e.test@meetingmind.com');
+    await page.locator('input[type="password"]').fill('TestPassword123!');
+    await page.locator('button[type="submit"]').click();
+    await page.waitForURL(/\/dashboard/, { timeout: 10000 }).catch(() => {});
     
     // Get current theme
     const getTheme = async () => {
       return page.evaluate(() => {
         const html = document.documentElement;
-        return html.classList.contains('dark') || localStorage.getItem('meetingmind-theme') === 'dark' ? 'dark' : 'light';
+        return (html.classList.contains('dark') || localStorage.getItem('meetingmind-theme') === 'dark') ? 'dark' : 'light';
       });
     };
     
+    const themeToggle = page.locator('button[aria-label*="Switch to"]');
     await themeToggle.click();
     const expectedTheme = await getTheme();
     
@@ -65,11 +74,15 @@ test.describe('Theme Toggle', () => {
   });
 
   test('theme applies correctly to page', async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard`);
+    // Login first
+    await page.goto(`${BASE_URL}/login`);
+    await page.getByRole('textbox', { name: /email/i }).fill('e2e.test@meetingmind.com');
+    await page.locator('input[type="password"]').fill('TestPassword123!');
+    await page.locator('button[type="submit"]').click();
+    await page.waitForURL(/\/dashboard/, { timeout: 10000 }).catch(() => {});
     
-    // Find and click theme toggle to dark
-    const themeToggle = page.locator('[data-testid*="theme"], button:has-text("theme"), [class*="theme"], [aria-label*="theme"], button:has-text("🌙"), button:has-text("☀️")').first();
-    
+    // Click theme toggle
+    const themeToggle = page.locator('button[aria-label*="Switch to"]');
     await themeToggle.click();
     await page.waitForTimeout(500);
     
@@ -82,11 +95,15 @@ test.describe('Theme Toggle', () => {
   });
 
   test('theme toggle accessible', async ({ page }) => {
-    await page.goto(`${BASE_URL}/dashboard`);
+    // Login first
+    await page.goto(`${BASE_URL}/login`);
+    await page.getByRole('textbox', { name: /email/i }).fill('e2e.test@meetingmind.com');
+    await page.locator('input[type="password"]').fill('TestPassword123!');
+    await page.locator('button[type="submit"]').click();
+    await page.waitForURL(/\/dashboard/, { timeout: 10000 }).catch(() => {});
     
-    // Theme toggle should be accessible (button or proper role)
-    const themeToggle = page.locator('button:has-text("theme"), [role="switch"][aria-label*="theme"], [aria-label*="theme toggle"]').first();
-    
+    // Theme toggle should have proper aria-label
+    const themeToggle = page.locator('button[aria-label*="Switch to"]');
     await expect(themeToggle).toBeAttached();
   });
 });
