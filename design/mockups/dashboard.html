@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — MeetingMind</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#EFF6FF',
+                            100: '#DBEAFE',
+                            500: '#2563EB',
+                            600: '#1D4ED8',
+                            700: '#1E40AF',
+                        },
+                        secondary: {
+                            50: '#EEF2FF',
+                            500: '#6366F1',
+                            600: '#4F46E5',
+                        },
+                        accent: {
+                            100: '#FEF3C7',
+                            500: '#F59E0B',
+                            600: '#D97706',
+                        },
+                        success: {
+                            50: '#ECFDF5',
+                            100: '#D1FAE5',
+                            500: '#10B981',
+                        },
+                        warning: {
+                            50: '#FFFBEB',
+                            500: '#F59E0B',
+                        },
+                        error: {
+                            50: '#FEF2F2',
+                            100: '#FEE2E2',
+                            500: '#EF4444',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-900 antialiased">
+
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-30 hidden md:flex">
+            <div class="p-6">
+                <span class="text-xl font-bold text-primary-500">MeetingMind</span>
+            </div>
+            <nav class="flex-1 px-4">
+                <ul class="space-y-1">
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                            </svg>
+                            Meetings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            Clients
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            Calendar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="p-4 border-t border-gray-100">
+                <div class="flex items-center gap-3 px-4 py-3">
+                    <div class="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">JD</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">John Doe</p>
+                        <p class="text-xs text-gray-500 truncate">john@acme.com</p>
+                    </div>
+                    <button class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile Header -->
+        <header class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-30">
+            <div class="flex items-center justify-between px-4 h-14">
+                <span class="text-lg font-bold text-primary-500">MeetingMind</span>
+                <button class="p-2" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="md:hidden hidden fixed inset-0 bg-black/50 z-40" id="mobile-overlay"></div>
+        <aside class="md:hidden fixed left-0 top-0 bottom-0 w-64 bg-white z-50 transform -translate-x-full transition-transform" id="mobile-sidebar">
+            <div class="p-4 border-b border-gray-200">
+                <span class="text-xl font-bold text-primary-500">MeetingMind</span>
+            </div>
+            <nav class="p-4">
+                <ul class="space-y-1">
+                    <li><a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium">Dashboard</a></li>
+                    <li><a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">Meetings</a></li>
+                    <li><a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">Clients</a></li>
+                    <li><a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">Calendar</a></li>
+                    <li><a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50">Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 md:ml-64 pt-14 md:pt-0">
+            <!-- Top Bar -->
+            <header class="bg-white border-b border-gray-200 px-4 md:px-8 py-4 sticky top-0 md:top-0 z-20">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-900">Dashboard</h1>
+                        <p class="text-sm text-gray-500">Welcome back, John</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="relative hidden sm:block">
+                            <input type="text" placeholder="Search commitments..." class="w-64 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <button class="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                            </svg>
+                            <span class="absolute top-1 right-1 w-2 h-2 bg-error-500 rounded-full"></span>
+                        </button>
+                        <button class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            New Meeting
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-4 md:p-8">
+                <!-- Stats Row -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 animate-fade-in">
+                    <!-- Total -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">47</p>
+                                <p class="text-sm text-gray-500">Total</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Open -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">23</p>
+                                <p class="text-sm text-gray-500">Open</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fulfilled -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-success-50 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900">19</p>
+                                <p class="text-sm text-gray-500">Fulfilled</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Overdue -->
+                    <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-error-50 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-error-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-error-500">5</p>
+                                <p class="text-sm text-gray-500">Overdue</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Overdue Alert -->
+                <div class="bg-error-50 border border-error-200 rounded-lg p-4 mb-6 flex items-center justify-between animate-fade-in">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-error-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <span class="text-error-700 font-medium">You have 5 overdue commitments</span>
+                    </div>
+                    <button class="text-error-600 hover:text-error-700 font-medium text-sm">View Overdue →</button>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Commitment Feed -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                                <h2 class="font-semibold text-gray-900">Recent Commitments</h2>
+                                <div class="flex items-center gap-2">
+                                    <select class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                        <option>All Status</option>
+                                        <option>Open</option>
+                                        <option>Fulfilled</option>
+                                        <option>Overdue</option>
+                                    </select>
+                                    <select class="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                        <option>Newest</option>
+                                        <option>Deadline</option>
+                                        <option>Client</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-gray-50">
+                                <!-- Commitment 1 -->
+                                <div class="p-4 hover:bg-gray-50 transition-colors flex items-start gap-4">
+                                    <button class="mt-1 w-10 h-6 rounded-full bg-primary-500 relative transition-colors" onclick="toggleCommitment(this)">
+                                        <span class="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform"></span>
+                                    </button>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 mb-1">Send revised proposal with updated pricing tiers</p>
+                                        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                                            <span class="bg-gray-100 px-2 py-0.5 rounded">Acme Corp</span>
+                                            <span class="flex items-center gap-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                Mar 21, 2026
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="bg-accent-100 text-accent-600 text-xs font-medium px-2 py-1 rounded">$15K</span>
+                                    <button class="text-gray-400 hover:text-gray-600 p-1">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <!-- Commitment 2 -->
+                                <div class="p-4 hover:bg-gray-50 transition-colors flex items-start gap-4">
+                                    <button class="mt-1 w-10 h-6 rounded-full bg-primary-500 relative transition-colors" onclick="toggleCommitment(this)">
+                                        <span class="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform"></span>
+                                    </button>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 mb-1">Confirm Q2 budget allocation with finance team</p>
+                                        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                                            <span class="bg-gray-100 px-2 py-0.5 rounded">Globex Industries</span>
+                                            <span class="flex items-center gap-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                Mar 25, 2026
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button class="text-gray-400 hover:text-gray-600 p-1">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <!-- Commitment 3 -->
+                                <div class="p-4 hover:bg-gray-50 transition-colors flex items-start gap-4 bg-success-50/30">
+                                    <button class="mt-1 w-10 h-6 rounded-full bg-success-500 relative transition-colors" onclick="toggleCommitment(this)">
+                                        <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform flex items-center justify-center">
+                                            <svg class="w-3 h-3 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-500 line-through mb-1">Deliver sample product for testing</p>
+                                        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-400">
+                                            <span class="bg-gray-100 px-2 py-0.5 rounded">Initech</span>
+                                            <span class="flex items-center gap-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                Mar 20, 2026
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="text-success-500 text-xs font-medium">Fulfilled</span>
+                                </div>
+                                <!-- Commitment 4 -->
+                                <div class="p-4 hover:bg-gray-50 transition-colors flex items-start gap-4 bg-error-50/30">
+                                    <button class="mt-1 w-10 h-6 rounded-full bg-error-500 relative transition-colors" onclick="toggleCommitment(this)">
+                                        <span class="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform"></span>
+                                    </button>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-error-600 mb-1">Schedule follow-up call next week</p>
+                                        <div class="flex flex-wrap items-center gap-2 text-xs text-error-500">
+                                            <span class="bg-error-100 px-2 py-0.5 rounded">Stark Industries</span>
+                                            <span class="flex items-center gap-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                                </svg>
+                                                Overdue · Was Mar 18
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <button class="text-gray-400 hover:text-gray-600 p-1">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <!-- Commitment 5 -->
+                                <div class="p-4 hover:bg-gray-50 transition-colors flex items-start gap-4">
+                                    <button class="mt-1 w-10 h-6 rounded-full bg-primary-500 relative transition-colors" onclick="toggleCommitment(this)">
+                                        <span class="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform"></span>
+                                    </button>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 mb-1">Provide API documentation for integration</p>
+                                        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                                            <span class="bg-gray-100 px-2 py-0.5 rounded">Umbrella Corp</span>
+                                            <span class="flex items-center gap-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                Mar 28, 2026
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span class="bg-accent-100 text-accent-600 text-xs font-medium px-2 py-1 rounded">$3.2K</span>
+                                    <button class="text-gray-400 hover:text-gray-600 p-1">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="px-6 py-4 border-t border-gray-100">
+                                <a href="#" class="text-primary-500 hover:text-primary-600 font-medium text-sm">View All Commitments →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Meetings Sidebar -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                                <h2 class="font-semibold text-gray-900">Recent Meetings</h2>
+                                <a href="#" class="text-primary-500 hover:text-primary-600 text-sm">View All</a>
+                            </div>
+                            <div class="divide-y divide-gray-50">
+                                <!-- Meeting 1 -->
+                                <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900 truncate">Acme Corp Q1 Review</p>
+                                            <p class="text-xs text-gray-500">Mar 15, 2026</p>
+                                        </div>
+                                        <span class="bg-secondary-50 text-secondary-600 text-xs font-medium px-2 py-1 rounded flex-shrink-0">3 commitments</span>
+                                    </div>
+                                </a>
+                                <!-- Meeting 2 -->
+                                <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900 truncate">Globex Kickoff Call</p>
+                                            <p class="text-xs text-gray-500">Mar 14, 2026</p>
+                                        </div>
+                                        <span class="bg-secondary-50 text-secondary-600 text-xs font-medium px-2 py-1 rounded flex-shrink-0">5 commitments</span>
+                                    </div>
+                                </a>
+                                <!-- Meeting 3 -->
+                                <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-900 truncate">Stark Industries Weekly Sync</p>
+                                            <p class="text-xs text-gray-500">Mar 18, 2026</p>
+                                        </div>
+                                        <span class="bg-secondary-50 text-secondary-600 text-xs font-medium px-2 py-1 rounded flex-shrink-0">2 commitments</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="px-6 py-4 border-t border-gray-100">
+                                <button class="w-full border border-dashed border-gray-300 rounded-lg py-3 text-gray-500 hover:text-gray-700 hover:border-gray-400 transition-colors flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Upload Recording
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Upload Zone -->
+                        <div class="mt-6 bg-white rounded-xl shadow-sm border-2 border-dashed border-gray-200 p-8 text-center">
+                            <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-600 font-medium mb-1">Drop your audio file here</p>
+                            <p class="text-gray-400 text-sm mb-4">or click to browse</p>
+                            <p class="text-gray-400 text-xs">MP3, M4A, WAV, MP4 supported</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+
+        function toggleMobileMenu() {
+            mobileSidebar.classList.toggle('-translate-x-full');
+            mobileOverlay.classList.toggle('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileOverlay.addEventListener('click', toggleMobileMenu);
+
+        // Toggle commitment status
+        function toggleCommitment(btn) {
+            const isOpen = btn.classList.contains('bg-primary-500');
+            const isOverdue = btn.classList.contains('bg-error-500');
+            
+            if (isOpen || isOverdue) {
+                btn.classList.remove('bg-primary-500', 'bg-error-500');
+                btn.classList.add('bg-success-500');
+                btn.querySelector('span').style.transform = 'translateX(-20px)';
+                btn.querySelector('span').innerHTML = '<svg class="w-3 h-3 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+            } else {
+                btn.classList.remove('bg-success-500');
+                btn.classList.add('bg-primary-500');
+                btn.querySelector('span').style.transform = 'translateX(0)';
+                btn.querySelector('span').innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>

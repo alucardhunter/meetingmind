@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeetingMind — Stop Losing Commitments from Meetings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: { 50: '#EFF6FF', 100: '#DBEAFE', 500: '#2563EB', 600: '#1D4ED8', 700: '#1E40AF' },
+            secondary: { 50: '#EEF2FF', 500: '#6366F1', 600: '#4F46E5' },
+            accent: { 500: '#F59E0B', 600: '#D97706' },
+            success: { 50: '#ECFDF5', 500: '#10B981' },
+            warning: { 50: '#FFFBEB', 500: '#F59E0B' },
+            error: { 50: '#FEF2F2', 500: '#EF4444' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #EFF6FF 0%, #EEF2FF 50%, #F9FAFB 100%); }
+    .card-hover { transition: transform 150ms ease-out, box-shadow 150ms ease-out; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <span class="font-bold text-xl">MeetingMind</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+        <a href="#features" class="hover:text-primary-500 transition-colors">Features</a>
+        <a href="#how-it-works" class="hover:text-primary-500 transition-colors">How It Works</a>
+        <a href="#pricing" class="hover:text-primary-500 transition-colors">Pricing</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#" class="text-sm font-medium text-gray-600 hover:text-primary-500 px-4 py-2">Log in</a>
+        <a href="#" class="text-sm font-medium bg-primary-500 text-white px-5 py-2.5 rounded-lg hover:bg-primary-600 transition-colors shadow-sm">Get Started Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="gradient-hero py-24 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+        <span class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
+        Commitment tracking that actually works
+      </div>
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
+        Stop losing commitments<br>
+        <span class="text-primary-500">from meetings</span>
+      </h1>
+      <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+        Upload your meeting. AI extracts every promise, deadline, and dollar amount — into commitment cards you can track until they're fulfilled.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#" class="bg-primary-500 text-white font-semibold px-8 py-4 rounded-xl hover:bg-primary-600 transition-all shadow-lg shadow-primary-500/25 text-lg">
+          Start Free — 3 Meetings
+        </a>
+        <a href="#how-it-works" class="flex items-center justify-center gap-2 text-gray-600 font-medium px-8 py-4 rounded-xl border border-gray-300 hover:border-gray-400 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Watch Demo
+        </a>
+      </div>
+      <p class="mt-4 text-sm text-gray-500">No credit card required</p>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section class="bg-gray-900 text-white py-6 px-6">
+    <div class="max-w-4xl mx-auto flex flex-wrap justify-center gap-12 text-center">
+      <div><div class="text-2xl font-bold">12,400+</div><div class="text-gray-400 text-sm">Meetings processed</div></div>
+      <div><div class="text-2xl font-bold">48,000+</div><div class="text-gray-400 text-sm">Commitments tracked</div></div>
+      <div><div class="text-2xl font-bold">94%</div><div class="text-gray-400 text-sm">Commitment fulfillment</div></div>
+      <div><div class="text-2xl font-bold">2,100+</div><div class="text-gray-400 text-sm">Teams using MeetingMind</div></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">Every promise, tracked automatically</h2>
+        <p class="text-xl text-gray-600">Not just transcription — a commitment tracking system that makes sure nothing slips through.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Feature 1 -->
+        <div class="bg-gray-50 rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">Commitment Cards</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Every promise extracted as a structured card — who promised what, when, and how much.</p>
+        </div>
+        <!-- Feature 2 -->
+        <div class="bg-gray-50 rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 bg-warning-50 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">Deadline Tracking</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Deadlines auto-detected from the conversation. Overdue commitments surface automatically.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="bg-gray-50 rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 bg-secondary-50 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-secondary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">Client Ledger</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Tag meetings by client. See every commitment across all your calls with them.</p>
+        </div>
+        <!-- Feature 4 -->
+        <div class="bg-gray-50 rounded-2xl p-6 card-hover border border-gray-100">
+          <div class="w-12 h-12 bg-success-50 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          </div>
+          <h3 class="font-semibold text-lg mb-2">Export Anywhere</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Push summaries to Notion, Slack, or copy to clipboard. One click.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" class="py-24 px-6 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">From meeting to commitment ledger in 3 steps</h2>
+        <p class="text-xl text-gray-600">It takes less than 2 minutes to go from raw audio to tracked commitments.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 bg-primary-500 text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg shadow-primary-500/30">1</div>
+          <h3 class="font-semibold text-xl mb-3">Upload or Record</h3>
+          <p class="text-gray-600">Drag-and-drop an audio file or record directly in your browser. MP3, WAV, M4A, WebM — all supported.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-secondary-500 text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg shadow-secondary-500/30">2</div>
+          <h3 class="font-semibold text-xl mb-3">AI Extracts Commitments</h3>
+          <p class="text-gray-600">Whisper transcribes your meeting. GPT-4o extracts every commitment, deadline, and dollar value.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 bg-success-500 text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-6 shadow-lg shadow-success-500/30">3</div>
+          <h3 class="font-semibold text-xl mb-3">Track Until Fulfilled</h3>
+          <p class="text-gray-600">Commitment cards with status toggles. Overdue alerts. Client history. Export to Notion or Slack.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMITMENT CARD PREVIEW -->
+  <section class="py-24 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">Commitment cards that drive action</h2>
+        <p class="text-xl text-gray-600">Every extracted commitment becomes a trackable card your whole team can see.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Open Commitment -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-md">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm font-semibold text-primary-600">SF</div>
+              <div>
+                <div class="font-medium">Sarah from Acme Corp</div>
+                <div class="text-sm text-gray-500">Sales Discovery Call • Mar 15</div>
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span> Open
+            </span>
+          </div>
+          <p class="text-gray-800 font-medium mb-4">"I'll send over the revised proposal with the 15% discount by tomorrow EOD."</p>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 px-2.5 py-1 rounded-lg">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              Mar 16
+            </span>
+            <span class="inline-flex items-center gap-1 bg-success-50 text-success-700 px-2.5 py-1 rounded-lg font-medium">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              $4,200
+            </span>
+          </div>
+          <button class="mt-4 w-full bg-primary-500 text-white font-medium py-2.5 rounded-xl hover:bg-primary-600 transition-colors text-sm">
+            Mark Fulfilled ✓
+          </button>
+        </div>
+        <!-- Overdue Commitment -->
+        <div class="bg-white border border-error-500/30 rounded-2xl p-6 shadow-md">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">MR</div>
+              <div>
+                <div class="font-medium">Marcus Rivera</div>
+                <div class="text-sm text-gray-500">Project Kickoff • Mar 10</div>
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1 bg-error-50 text-error-600 text-xs font-medium px-2.5 py-1 rounded-full">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              3 days overdue
+            </span>
+          </div>
+          <p class="text-gray-800 font-medium mb-4">"Will send the signed contract via DocuSign by March 12th."</p>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <span class="inline-flex items-center gap-1 bg-error-50 text-error-600 px-2.5 py-1 rounded-lg">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              Mar 12 (overdue)
+            </span>
+          </div>
+          <button class="mt-4 w-full bg-error-500 text-white font-medium py-2.5 rounded-xl hover:bg-error-600 transition-colors text-sm">
+            Mark Fulfilled ✓
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="py-24 px-6 bg-gray-50">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">Simple, transparent pricing</h2>
+        <p class="text-xl text-gray-600">Start free. Upgrade when you need more.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Free -->
+        <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+          <div class="text-gray-500 font-medium mb-2">Free</div>
+          <div class="text-4xl font-bold mb-1">$0<span class="text-lg font-normal text-gray-500">/mo</span></div>
+          <p class="text-gray-600 text-sm mb-6">For individuals getting started.</p>
+          <ul class="space-y-3 text-sm text-gray-700 mb-8">
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 3 meetings/month</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> 10 commitments tracked</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Basic export (clipboard)</li>
+          </ul>
+          <button class="w-full py-2.5 rounded-xl border border-gray-300 text-gray-700 font-medium hover:border-gray-400 transition-colors">Get Started</button>
+        </div>
+        <!-- Pro -->
+        <div class="bg-primary-500 text-white rounded-2xl p-8 border border-primary-600 shadow-xl shadow-primary-500/20 relative">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent-500 text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</div>
+          <div class="text-primary-100 font-medium mb-2">Pro</div>
+          <div class="text-4xl font-bold mb-1">$19<span class="text-lg font-normal text-primary-100">/mo</span></div>
+          <p class="text-primary-100 text-sm mb-6">For freelancers and consultants.</p>
+          <ul class="space-y-3 text-sm mb-8">
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Unlimited meetings</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Unlimited commitments</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Deadline alerts (email)</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Export to Notion + Slack</li>
+          </ul>
+          <button class="w-full py-2.5 rounded-xl bg-white text-primary-600 font-semibold hover:bg-primary-50 transition-colors">Start 14-Day Free Trial</button>
+        </div>
+        <!-- Team -->
+        <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+          <div class="text-gray-500 font-medium mb-2">Team</div>
+          <div class="text-4xl font-bold mb-1">$15<span class="text-lg font-normal text-gray-500">/user/mo</span></div>
+          <p class="text-gray-600 text-sm mb-6">For small agencies and sales teams.</p>
+          <ul class="space-y-3 text-sm text-gray-700 mb-8">
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Everything in Pro</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Shared team dashboard</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Admin controls</li>
+            <li class="flex items-center gap-2"><svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Priority support</li>
+          </ul>
+          <button class="w-full py-2.5 rounded-xl border border-gray-300 text-gray-700 font-medium hover:border-gray-400 transition-colors">Contact Sales</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-4xl font-bold text-center mb-12">Frequently asked questions</h2>
+      <div class="space-y-4">
+        <div class="border border-gray-200 rounded-xl p-5">
+          <div class="font-medium text-lg">How accurate is the commitment extraction?</div>
+          <p class="text-gray-600 mt-2">We use GPT-4o for extraction, which achieves ~90% accuracy on commitment identification. Combined with regex fallback for dates and dollar amounts, you should review and correct any extracted commitments — they're meant to save you time, not replace your attention entirely.</p>
+        </div>
+        <div class="border border-gray-200 rounded-xl p-5">
+          <div class="font-medium text-lg">What audio formats are supported?</div>
+          <p class="text-gray-600 mt-2">MP3, WAV, M4A, MP4, WebM, and OGG. Files up to 25MB (approximately 30 minutes of audio). For longer recordings, split them first or contact us about enterprise options.</p>
+        </div>
+        <div class="border border-gray-200 rounded-xl p-5">
+          <div class="font-medium text-lg">Can I record directly in the browser?</div>
+          <p class="text-gray-600 mt-2">Yes. MeetingMind uses the MediaRecorder API to capture audio directly from your microphone. Chrome, Firefox, and Edge are fully supported. Safari support is partial — we recommend uploading a recording instead.</p>
+        </div>
+        <div class="border border-gray-200 rounded-xl p-5">
+          <div class="font-medium text-lg">What happens to my data?</div>
+          <p class="text-gray-600 mt-2">Your audio and transcripts are encrypted in transit and at rest. We do not use your meeting data to train any AI models. You can delete your account and all data at any time — permanently.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-gray-400 py-12 px-6">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-7 h-7 bg-primary-500 rounded-lg flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <span class="font-bold text-white text-lg">MeetingMind</span>
+        </div>
+        <p class="text-sm">Commitment tracking for teams that keep their promises.</p>
+      </div>
+      <div>
+        <div class="font-medium text-white mb-3">Product</div>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+          <li><a href="#pricing" class="hover:text-white transition-colors">Pricing</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Integrations</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-medium text-white mb-3">Company</div>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white transition-colors">About</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-medium text-white mb-3">Legal</div>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-6xl mx-auto border-t border-gray-800 pt-8 text-sm text-center">
+      © 2026 MeetingMind. All rights reserved.
+    </div>
+  </footer>
+
+</body>
+</html>

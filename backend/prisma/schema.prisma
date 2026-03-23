@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String?
+  meetings  Meeting[]
+  createdAt DateTime  @default(now())
+}
+
+model Meeting {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  title       String
+  client      String?      // NEW: links commitments across meetings
+  meetingDate DateTime?
+  audioUrl    String?
+  transcript  String?      @db.Text
+  summary     Json?        // legacy: raw summary blob
+  status      String       @default("pending")
+  commitments Commitment[] // NEW: first-class commitments
+  createdAt   DateTime     @default(now())
+}
+
+model Commitment {
+  id             String    @id @default(uuid())
+  meetingId      String
+  meeting        Meeting   @relation(fields: [meetingId], references: [id])
+  text           String    // the commitment text
+  deadline       DateTime? // extracted deadline (if found)
+  amountValue    Decimal?  @db.Decimal(12, 2) // extracted $ value
+  amountCurrency String?   // "$" | "€" | "£"
+  owner          String?   // who made the commitment (if identifiable)
+  status         String    @default("open") // open | fulfilled | overdue
+  createdAt      DateTime  @default(now())
+  fulfilledAt    DateTime? // when marked fulfilled
+}

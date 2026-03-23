@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acme Corp Q1 Review — MeetingMind</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#EFF6FF',
+                            100: '#DBEAFE',
+                            500: '#2563EB',
+                            600: '#1D4ED8',
+                            700: '#1E40AF',
+                        },
+                        secondary: {
+                            50: '#EEF2FF',
+                            500: '#6366F1',
+                            600: '#4F46E5',
+                        },
+                        accent: {
+                            100: '#FEF3C7',
+                            500: '#F59E0B',
+                            600: '#D97706',
+                        },
+                        success: {
+                            50: '#ECFDF5',
+                            100: '#D1FAE5',
+                            500: '#10B981',
+                        },
+                        warning: {
+                            50: '#FFFBEB',
+                            500: '#F59E0B',
+                        },
+                        error: {
+                            50: '#FEF2F2',
+                            100: '#FEE2E2',
+                            500: '#EF4444',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        
+        /* Audio progress */
+        input[type="range"] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type="range"]::-webkit-slider-track {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #2563EB;
+            border-radius: 50%;
+            margin-top: -5px;
+            cursor: pointer;
+        }
+        
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-900 antialiased">
+
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Navigation -->
+        <header class="bg-white border-b border-gray-200 px-4 md:px-6 py-3 sticky top-0 z-20">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="#" class="text-gray-500 hover:text-gray-700 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        <span class="hidden sm:inline">Back to Dashboard</span>
+                    </a>
+                </div>
+                <span class="text-xl font-bold text-primary-500">MeetingMind</span>
+                <div class="flex items-center gap-3">
+                    <div class="relative hidden sm:block">
+                        <input type="text" placeholder="Search..." class="w-40 md:w-64 pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <div class="w-9 h-9 bg-primary-500 rounded-full flex items-center justify-center text-white font-semibold text-sm cursor-pointer">JD</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <div class="max-w-7xl mx-auto px-4 md:px-6 py-6">
+                <!-- Meeting Header -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6 animate-fade-in">
+                    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Acme Corp Q1 Review</h1>
+                                <span class="bg-success-50 text-success-600 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Processed
+                                </span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                    Acme Corp
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    March 15, 2026
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    45 minutes
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="relative">
+                                <button class="border border-gray-200 hover:border-gray-300 bg-white text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2" onclick="toggleExportMenu()">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                                    </svg>
+                                    Export
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-30" id="export-menu">
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                        </svg>
+                                        Copy to clipboard
+                                    </button>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                        Export to Notion
+                                    </button>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                        </svg>
+                                        Send to Slack
+                                    </button>
+                                    <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                        Download PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-100">
+                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                            <p class="text-2xl font-bold text-gray-700">3</p>
+                            <p class="text-xs text-gray-500">Total</p>
+                        </div>
+                        <div class="text-center p-3 bg-primary-50 rounded-lg">
+                            <p class="text-2xl font-bold text-primary-600">2</p>
+                            <p class="text-xs text-primary-600">Open</p>
+                        </div>
+                        <div class="text-center p-3 bg-success-50 rounded-lg">
+                            <p class="text-2xl font-bold text-success-600">1</p>
+                            <p class="text-xs text-success-600">Fulfilled</p>
+                        </div>
+                        <div class="text-center p-3 bg-error-50 rounded-lg">
+                            <p class="text-2xl font-bold text-error-600">0</p>
+                            <p class="text-xs text-error-600">Overdue</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid -->
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Commitment Cards -->
+                    <div class="lg:col-span-2 space-y-4 animate-fade-in">
+                        <h2 class="text-lg font-semibold text-gray-900">Commitments</h2>
+                        
+                        <!-- Card 1: Open -->
+                        <div class="bg-white rounded-xl shadow-md border-l-4 border-l-primary-500 p-5 hover:shadow-lg transition-shadow">
+                            <div class="flex items-start justify-between gap-4 mb-4">
+                                <div class="flex items-center gap-3">
+                                    <button class="w-12 h-7 rounded-full bg-primary-500 relative transition-colors" onclick="toggleCard(this)" data-status="open">
+                                        <span class="absolute right-0.5 top-0.5 w-6 h-6 bg-white rounded-full shadow-sm transition-transform"></span>
+                                    </button>
+                                    <span class="bg-primary-100 text-primary-700 text-xs font-medium px-2 py-1 rounded">Open</span>
+                                </div>
+                                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">JD</div>
+                            </div>
+                            <p class="text-gray-900 font-medium mb-4">Send revised proposal with updated pricing tiers</p>
+                            <div class="flex flex-wrap items-center gap-3 text-sm">
+                                <span class="flex items-center gap-1.5 text-gray-500">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Due Mar 22, 2026
+                                </span>
+                                <span class="bg-accent-100 text-accent-600 text-xs font-semibold px-2 py-1 rounded">$15,000</span>
+                            </div>
+                            <div class="absolute top-4 right-4">
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Open -->
+                        <div class="bg-white rounded-xl shadow-md border-l-4 border-l-primary-500 p-5 hover:shadow-lg transition-shadow">
+                            <div class="flex items-start justify-between gap-4 mb-4">
+                                <div class="flex items-center gap-3">
+                                    <button class="w-12 h-7 rounded-full bg-primary-500 relative transition-colors" onclick="toggleCard(this)" data-status="open">
+                                        <span class="absolute right-0.5 top-0.5 w-6 h-6 bg-white rounded-full shadow-sm transition-transform"></span>
+                                    </button>
+                                    <span class="bg-primary-100 text-primary-700 text-xs font-medium px-2 py-1 rounded">Open</span>
+                                </div>
+                                <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">SM</div>
+                            </div>
+                            <p class="text-gray-900 font-medium mb-4">Confirm Q2 budget allocation with finance team</p>
+                            <div class="flex flex-wrap items-center gap-3 text-sm">
+                                <span class="flex items-center gap-1.5 text-gray-500">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Due Mar 28, 2026
+                                </span>
+                                <span class="text-gray-400 text-sm">No dollar value</span>
+                            </div>
+                            <div class="absolute top-4 right-4">
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Fulfilled -->
+                        <div class="bg-white rounded-xl shadow-md border-l-4 border-l-success-500 p-5 hover:shadow-lg transition-shadow">
+                            <div class="flex items-start justify-between gap-4 mb-4">
+                                <div class="flex items-center gap-3">
+                                    <button class="w-12 h-7 rounded-full bg-success-500 relative transition-colors" onclick="toggleCard(this)" data-status="fulfilled">
+                                        <span class="absolute left-0.5 top-0.5 w-6 h-6 bg-white rounded-full shadow-sm transition-transform flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                    <span class="bg-success-100 text-success-700 text-xs font-medium px-2 py-1 rounded">Fulfilled</span>
+                                </div>
+                                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">JD</div>
+                            </div>
+                            <p class="text-gray-500 font-medium line-through mb-4">Schedule product demo for next week</p>
+                            <div class="flex flex-wrap items-center gap-3 text-sm">
+                                <span class="flex items-center gap-1.5 text-gray-400">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Due Mar 20, 2026
+                                </span>
+                                <span class="text-success-600 text-sm font-medium">✓ Completed</span>
+                            </div>
+                            <div class="absolute top-4 right-4">
+                                <button class="text-gray-400 hover:text-gray-600 p-1">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="lg:col-span-1 space-y-6 animate-fade-in">
+                        <!-- Audio Player -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                            <h3 class="font-semibold text-gray-900 mb-4">Audio Recording</h3>
+                            <div class="bg-gray-100 rounded-lg p-4 mb-4">
+                                <div class="flex items-center justify-center gap-1 mb-3">
+                                    <!-- Waveform bars -->
+                                    <div class="w-1 h-8 bg-gray-300 rounded-full"></div>
+                                    <div class="w-1 h-12 bg-gray-400 rounded-full"></div>
+                                    <div class="w-1 h-6 bg-gray-300 rounded-full"></div>
+                                    <div class="w-1 h-10 bg-primary-400 rounded-full"></div>
+                                    <div class="w-1 h-14 bg-primary-500 rounded-full"></div>
+                                    <div class="w-1 h-8 bg-primary-400 rounded-full"></div>
+                                    <div class="w-1 h-6 bg-gray-300 rounded-full"></div>
+                                    <div class="w-1 h-12 bg-gray-400 rounded-full"></div>
+                                    <div class="w-1 h-4 bg-gray-300 rounded-full"></div>
+                                    <div class="w-1 h-10 bg-primary-500 rounded-full"></div>
+                                    <div class="w-1 h-8 bg-gray-300 rounded-full"></div>
+                                    <div class="w-1 h-6 bg-gray-400 rounded-full"></div>
+                                    <div class="w-1 h-12 bg-gray-300 rounded-full"></div>
+                                    <div class="w-1 h-8 bg-primary-400 rounded-full"></div>
+                                    <div class="w-1 h-4 bg-gray-300 rounded-full"></div>
+                                </div>
+                                <input type="range" class="w-full" value="35" min="0" max="100">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm font-mono text-gray-500">12:34 / 45:00</div>
+                                <div class="flex items-center gap-2">
+                                    <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="p-3 bg-primary-500 hover:bg-primary-600 text-white rounded-full transition-colors" id="playBtn" onclick="togglePlay()">
+                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" id="playIcon">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Transcript -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                                <h3 class="font-semibold text-gray-900">Transcript</h3>
+                                <button class="text-gray-400 hover:text-gray-600" onclick="toggleTranscript()">
+                                    <svg class="w-5 h-5 transition-transform" id="transcriptChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="p-5 max-h-80 overflow-y-auto" id="transcriptContent">
+                                <div class="space-y-4 text-sm">
+                                    <p><span class="text-gray-400 font-mono">[00:00]</span> <span class="font-semibold text-gray-900">John:</span> Thanks for joining, Sarah. Let's quick cover the Q1 numbers.</p>
+                                    <p><span class="text-gray-400 font-mono">[00:12]</span> <span class="font-semibold text-gray-900">Sarah:</span> Absolutely. So Q1 was strong — we hit 112% of target.</p>
+                                    <p><span class="text-gray-400 font-mono">[00:45]</span> <span class="font-semibold text-gray-900">John:</span> Great. We need to send them a revised proposal with updated pricing tiers. Can you get that to me by Friday?</p>
+                                    <p><span class="text-gray-400 font-mono">[00:58]</span> <span class="font-semibold text-gray-900">Sarah:</span> Yes, I'll have that ready. What about the budget conversation we owe them?</p>
+                                    <p><span class="text-gray-400 font-mono">[01:15]</span> <span class="font-semibold text-gray-900">John:</span> Right. We also need to confirm Q2 budget allocation with our finance team. Let's schedule a call next week.</p>
+                                    <p><span class="text-gray-400 font-mono">[01:30]</span> <span class="font-semibold text-gray-900">Sarah:</span> I'll send a calendar invite. Anything else on their plate?</p>
+                                    <p><span class="text-gray-400 font-mono">[01:42]</span> <span class="font-semibold text-gray-900">John:</span> Actually yes — we promised them a product demo for their engineering team. Can you line that up for Thursday?</p>
+                                    <p><span class="text-gray-400 font-mono">[01:55]</span> <span class="font-semibold text-gray-900">Sarah:</span> On it. I'll schedule it for Thursday afternoon.</p>
+                                    <p><span class="text-gray-400 font-mono">[02:10]</span> <span class="font-semibold text-gray-900">John:</span> Perfect. Let's wrap up. Anything from your end?</p>
+                                    <p><span class="text-gray-400 font-mono">[02:18]</span> <span class="font-semibold text-gray-900">Sarah:</span> Nope, that's everything. I'll send the proposal tomorrow and set up the demo for Thursday.</p>
+                                    <p><span class="text-gray-400 font-mono">[02:25]</span> <span class="font-semibold text-gray-900">John:</span> Thanks Sarah, talk soon.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                            <h3 class="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                            <div class="space-y-2">
+                                <button class="w-full border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    Copy All Commitments
+                                </button>
+                                <button class="w-full border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Download PDF Summary
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="fixed top-4 right-4 bg-success-50 border border-success-200 text-success-700 px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 transform translate-x-full transition-transform duration-300 z-50">
+        <svg class="w-5 h-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span class="font-medium" id="toastMessage">Copied to clipboard!</span>
+    </div>
+
+    <script>
+        // Export menu toggle
+        function toggleExportMenu() {
+            const menu = document.getElementById('export-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close export menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('export-menu');
+            const btn = e.target.closest('button');
+            if (!btn || !btn.onclick?.toString().includes('toggleExportMenu')) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Transcript toggle
+        function toggleTranscript() {
+            const content = document.getElementById('transcriptContent');
+            const chevron = document.getElementById('transcriptChevron');
+            content.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+        }
+
+        // Play/pause toggle
+        let isPlaying = false;
+        function togglePlay() {
+            const btn = document.getElementById('playBtn');
+            const icon = document.getElementById('playIcon');
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                icon.innerHTML = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
+            } else {
+                icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+            }
+        }
+
+        // Toggle commitment card status
+        function toggleCard(btn) {
+            const status = btn.dataset.status;
+            const card = btn.closest('.bg-white');
+            const badge = card.querySelector('.bg-primary-100, .bg-success-100');
+            
+            if (status === 'open') {
+                btn.classList.remove('bg-primary-500');
+                btn.classList.add('bg-success-500');
+                btn.querySelector('span').style.transform = 'translateX(-24px)';
+                btn.querySelector('span').innerHTML = '<svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+                btn.dataset.status = 'fulfilled';
+                
+                badge.classList.remove('bg-primary-100', 'text-primary-700');
+                badge.classList.add('bg-success-100', 'text-success-700');
+                badge.textContent = 'Fulfilled';
+                
+                showToast('Commitment marked as fulfilled!');
+            } else {
+                btn.classList.remove('bg-success-500');
+                btn.classList.add('bg-primary-500');
+                btn.querySelector('span').style.transform = 'translateX(0)';
+                btn.querySelector('span').innerHTML = '';
+                btn.dataset.status = 'open';
+                
+                badge.classList.remove('bg-success-100', 'text-success-700');
+                badge.classList.add('bg-primary-100', 'text-primary-700');
+                badge.textContent = 'Open';
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            
+            toast.classList.remove('translate-x-full');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
