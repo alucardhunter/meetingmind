@@ -1,14 +1,28 @@
 'use client';
 
 import Link from 'next/link';
-import { useI18n } from '@/i18n';
+import { useI18n, translations } from '@/i18n';
 import { Button } from '@/components/ui';
 import { Check } from 'lucide-react';
 
 const plans = ['free', 'pro', 'team'] as const;
 
+type PlanData = {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+};
+
+function getPlanData(locale: string, plan: string): PlanData {
+  const tx = translations[locale] ?? translations['en-US'];
+  const key = `landing.pricing.${plan}` as keyof typeof tx.landing.pricing;
+  return tx.landing.pricing[key] as PlanData;
+}
+
 export function PricingSection() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   return (
     <section id="pricing" className="py-24 bg-slate-50">
@@ -21,13 +35,7 @@ export function PricingSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {plans.map((plan) => {
-            const planData = t(`landing.pricing.${plan}`) as unknown as {
-              name: string;
-              price: string;
-              period: string;
-              description: string;
-              features: string[];
-            };
+            const planData = getPlanData(locale, plan);
             const isPro = plan === 'pro';
             return (
               <div

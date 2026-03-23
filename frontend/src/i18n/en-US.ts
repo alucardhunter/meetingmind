@@ -257,7 +257,7 @@ export const enUS = {
         noAmount: 'No amount',
         noOwner: 'Unassigned',
         markFulfilled: 'Mark Fulfilled',
-        reopen: 'Reopen',
+        markOpen: 'Reopen',
       },
     },
   },
