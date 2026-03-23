@@ -128,7 +128,7 @@ router.get('/', async (req: AuthRequest, res: Response) => {
           },
         });
 
-        return {
+        return mapMeetingResponse({
           id: meeting.id,
           title: meeting.title,
           client: meeting.client,
@@ -140,7 +140,7 @@ router.get('/', async (req: AuthRequest, res: Response) => {
           openCommitments,
           fulfilledCommitments,
           overdueCommitments,
-        };
+        });
       })
     );
 
