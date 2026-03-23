@@ -29,13 +29,26 @@ function ThemeToggle() {
 }
 
 export function Navbar() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, loading } = useAuth();
   const { t, locale, setLocale } = useI18n();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
 
   const isPublicPage = ['/', '/login', '/signup'].includes(pathname);
+
+  // Show loading state during auth check to prevent hydration mismatch
+  if (loading) {
+    return (
+      <nav className="bg-white/80 dark:bg-dark-900/80 backdrop-blur-md border-b border-slate-200 dark:border-dark-700 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg animate-pulse" />
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   if (!isAuthenticated && isPublicPage) {
     return (

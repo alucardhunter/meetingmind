@@ -7,7 +7,7 @@ const router = Router();
 router.use(authenticate);
 
 // GET /meetings/stats
-router.get('/', async (req: AuthRequest, res: Response) => {
+router.get('/stats', async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId;
 
