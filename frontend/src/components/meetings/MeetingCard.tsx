@@ -38,11 +38,13 @@ export function MeetingCard({ meeting }: MeetingCardProps) {
               <div className="flex items-center gap-1.5 text-sm text-slate-500 mt-0.5">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>
-                  {new Date(meeting.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                  {meeting.date
+                    ? new Date(meeting.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : '—'}
                 </span>
               </div>
             </div>

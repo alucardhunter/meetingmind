@@ -180,6 +180,31 @@ export function Navbar() {
 
             <div className="hidden md:flex items-center gap-3">
               <ThemeToggle />
+              <div className="relative">
+                <button
+                  onClick={() => setLangOpen(!langOpen)}
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-dark-700 transition-colors"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>{supportedLocales.find((l) => l.code === locale)?.flag}</span>
+                </button>
+                {langOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-800 rounded-xl border border-slate-200 dark:border-dark-700 shadow-lg py-1 z-50">
+                    {supportedLocales.map((l) => (
+                      <button
+                        key={l.code}
+                        onClick={() => { setLocale(l.code); setLangOpen(false); }}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-dark-700 flex items-center gap-2 ${
+                          locale === l.code ? 'text-indigo-600 font-medium' : 'text-slate-700 dark:text-slate-300'
+                        }`}
+                      >
+                        <span>{l.flag}</span>
+                        <span>{l.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <span className="text-sm text-slate-600 dark:text-slate-400">{user?.name}</span>
               <Button variant="ghost" size="sm" onClick={logout}>
                 <LogOut className="w-4 h-4 mr-1" />

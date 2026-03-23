@@ -293,7 +293,9 @@ function MeetingsList() {
             <div className="min-w-0">
               <p className="font-medium text-slate-900 truncate">{meeting.title}</p>
               <p className="text-sm text-slate-500">
-                {new Date(meeting.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                {meeting.date
+                  ? new Date(meeting.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                  : '—'}
               </p>
             </div>
           </div>

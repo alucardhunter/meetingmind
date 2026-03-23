@@ -25,11 +25,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       return;
     }
+    // Try to restore user from localStorage first
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        // Invalid JSON, will refetch
+      }
+    }
     try {
       const userData = await getMe();
       setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
     } catch {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     } finally {
       setLoading(false);
     }
@@ -42,12 +53,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     const response = await apiLogin(email, password);
     localStorage.setItem('token', response.token);
+    localStorage.setItem('user', JSON.stringify(response.user));
     setUser(response.user);
   };
 
   const signup = async (email: string, password: string, name: string) => {
     const response = await apiSignup(email, password, name);
     localStorage.setItem('token', response.token);
+    localStorage.setItem('user', JSON.stringify(response.user));
     setUser(response.user);
   };
 
