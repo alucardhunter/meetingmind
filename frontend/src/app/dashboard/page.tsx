@@ -7,7 +7,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useMeetings, useCommitments } from '@/hooks/useMeetings';
 import { useI18n } from '@/i18n';
 import { CommitmentCard } from '@/components/meetings/CommitmentCard';
-import { Card, CardHeader, CardBody, Button, Spinner } from '@/components/ui';
+import { MeetingsList } from '@/components/meetings';
+import { Card, CardBody, Button, Spinner } from '@/components/ui';
 import { Plus, AlertTriangle, CheckCircle2, Circle, ListTodo } from 'lucide-react';
 import type { Commitment } from '@/types';
 
@@ -108,7 +109,7 @@ export default function DashboardPage() {
               <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5" />
               <div>
                 <p className="font-medium text-red-900 dark:text-red-200">
-                  {t('dashboard.alerts.overdue', { count: overdueCommitments.length })}
+                  {t('dashboard.alerts.overdue', { count: String(overdueCommitments.length) })}
                 </p>
                 <p className="text-sm text-red-700 dark:text-red-300 mt-1">
                   {t('dashboard.alerts.overdueDescription')}
@@ -126,7 +127,7 @@ export default function DashboardPage() {
             {t('dashboard.recentCommitments')}
           </h2>
           <Link href="/commitments" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
-            {t('dashboard.viewAll')}
+            {t('dashboard.meetings.viewAll')}
           </Link>
         </div>
 
@@ -157,13 +158,13 @@ export default function DashboardPage() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-            {t('dashboard.recentMeetings')}
+            {t('dashboard.meetings.title')}
           </h2>
           <Link href="/meetings" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
-            {t('dashboard.viewAll')}
+            {t('dashboard.meetings.viewAll')}
           </Link>
         </div>
-        {/* Meetings list would go here */}
+        <MeetingsList />
       </div>
     </div>
   );
