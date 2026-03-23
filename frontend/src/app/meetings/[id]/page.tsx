@@ -40,6 +40,7 @@ export default function MeetingDetailPage() {
 
   const [copied, setCopied] = useState(false);
   const [exportLoading, setExportLoading] = useState<string | null>(null);
+  const [audioError, setAudioError] = useState<string>('');
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) router.push('/login');
@@ -195,8 +196,11 @@ export default function MeetingDetailPage() {
               <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Play className="w-6 h-6 text-indigo-600" />
               </div>
-              <audio src={meeting.audioUrl} controls className="flex-1 h-10" />
+              <audio src={meeting.audioUrl} controls preload="metadata" className="flex-1 h-10" onError={() => setAudioError(`Failed to load: ${meeting.audioUrl}`)} />
             </div>
+            {audioError && (
+              <p className="text-sm text-red-600 mt-2">⚠️ {audioError}</p>
+            )}
           </CardBody>
         </Card>
       )}
