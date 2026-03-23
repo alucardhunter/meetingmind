@@ -171,6 +171,7 @@ export const translations: Record<string, TranslationDict> = {
       quickUpload: 'Nova Reunião',
       recentCommitments: 'Compromissos Recentes',
       viewAllCommitments: 'Ver Todos Compromissos',
+      noCommitments: 'Nenhum compromisso extraído ainda',
       commitments: {
         empty: {
           title: 'Nenhum compromisso ainda',
@@ -498,6 +499,7 @@ export const translations: Record<string, TranslationDict> = {
       quickUpload: 'Nova Reunião',
       recentCommitments: 'Compromissos Recentes',
       viewAllCommitments: 'Ver Todos Compromissos',
+      noCommitments: 'Nenhum compromisso extraído ainda',
       commitments: {
         empty: {
           title: 'Nenhum compromisso ainda',
@@ -824,6 +826,7 @@ export const translations: Record<string, TranslationDict> = {
       quickUpload: 'Nueva Reunión',
       recentCommitments: 'Compromisos Recientes',
       viewAllCommitments: 'Ver Todos Compromisos',
+      noCommitments: 'Ningún compromiso extraído aún',
       commitments: {
         empty: {
           title: 'Sin compromisos aún',

@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useI18n } from '@/i18n';
-import { getMeetings } from '@/services/api';
+import { getMeetings, deleteMeeting } from '@/services/api';
 import type { Meeting } from '@/types';
 import { Button } from '@/components/ui';
-import { Mic, Calendar, ChevronRight } from 'lucide-react';
+import { Mic, Calendar, ChevronRight, Trash2 } from 'lucide-react';
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-US', {
@@ -34,6 +34,20 @@ export function MeetingsList() {
     }
     fetchMeetings();
   }, []);
+
+  const handleDelete = async (e: React.MouseEvent, meetingId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!confirm('Delete this meeting?')) return;
+    
+    try {
+      await deleteMeeting(meetingId);
+      setMeetings(meetings.filter((m) => m.id !== meetingId));
+    } catch (error) {
+      console.error('Failed to delete meeting:', error);
+    }
+  };
 
   if (loading) {
     return (
@@ -67,12 +81,14 @@ export function MeetingsList() {
   return (
     <div className="divide-y divide-slate-200 dark:divide-dark-700">
       {meetings.map((meeting) => (
-        <Link
+        <div
           key={meeting.id}
-          href={`/meetings/${meeting.id}`}
-          className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-dark-800/50 transition-colors rounded-lg"
+          className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-dark-800/50 transition-colors rounded-lg group"
         >
-          <div className="flex items-center gap-3">
+          <Link
+            href={`/meetings/${meeting.id}`}
+            className="flex items-center gap-3 flex-1"
+          >
             <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
               <Mic className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             </div>
@@ -89,9 +105,19 @@ export function MeetingsList() {
                 )}
               </div>
             </div>
+          </Link>
+          
+          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button
+              onClick={(e) => handleDelete(e, meeting.id)}
+              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              title="Delete meeting"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+            <ChevronRight className="w-5 h-5 text-slate-400" />
           </div>
-          <ChevronRight className="w-5 h-5 text-slate-400" />
-        </Link>
+        </div>
       ))}
     </div>
   );

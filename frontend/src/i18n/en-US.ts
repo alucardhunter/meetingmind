@@ -141,6 +141,7 @@ export const enUS = {
     quickUpload: 'New Meeting',
     recentCommitments: 'Recent Commitments',
     viewAllCommitments: 'View All Commitments',
+    noCommitments: 'No commitments extracted yet',
     commitments: {
       empty: {
         title: 'No commitments yet',
