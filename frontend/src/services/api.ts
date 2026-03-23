@@ -10,6 +10,15 @@ import type {
 } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const BACKEND_URL = API_URL.replace(/\/$/, '');
+
+// Attach audioUrl with full backend URL so browser can resolve it
+function resolveMeetingAudioUrl(meeting: Meeting): Meeting {
+  if (meeting.audioUrl && !meeting.audioUrl.startsWith('blob:') && !meeting.audioUrl.startsWith('http')) {
+    return { ...meeting, audioUrl: `${BACKEND_URL}${meeting.audioUrl}` };
+  }
+  return meeting;
+}
 
 const client = axios.create({
   baseURL: API_URL,
@@ -58,12 +67,12 @@ export const getMe = async (): Promise<User> => {
 // Meetings
 export const getMeetings = async (): Promise<Meeting[]> => {
   const { data } = await client.get<{ meetings: Meeting[] }>('/meetings');
-  return data.meetings;
+  return data.meetings.map((m) => resolveMeetingAudioUrl(m));
 };
 
 export const getMeeting = async (id: string): Promise<Meeting> => {
   const { data } = await client.get<{ meeting: Meeting }>(`/meetings/${id}`);
-  return data.meeting;
+  return resolveMeetingAudioUrl(data.meeting);
 };
 
 export const createMeeting = async (formData: FormData): Promise<Meeting> => {
