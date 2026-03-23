@@ -7,7 +7,52 @@ const router = Router();
 
 router.use(authenticate);
 
-// GET /api/commitments — list all user's commitments
+// GET /commitments/stats — get commitment statistics
+router.get('/stats', async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    const userMeetings = await prisma.meeting.findMany({
+      where: { userId },
+      select: { id: true },
+    });
+    const meetingIds = userMeetings.map(m => m.id);
+
+    const total = await prisma.commitment.count({
+      where: { meetingId: { in: meetingIds } },
+    });
+
+    const open = await prisma.commitment.count({
+      where: {
+        meetingId: { in: meetingIds },
+        status: 'open',
+        OR: [{ deadline: null }, { deadline: { gte: new Date() } }],
+      },
+    });
+
+    const fulfilled = await prisma.commitment.count({
+      where: {
+        meetingId: { in: meetingIds },
+        status: 'fulfilled',
+      },
+    });
+
+    const overdue = await prisma.commitment.count({
+      where: {
+        meetingId: { in: meetingIds },
+        status: 'open',
+        deadline: { lt: new Date() },
+      },
+    });
+
+    res.json({ total, open, fulfilled, overdue });
+  } catch (error) {
+    console.error('Get commitment stats error:', error);
+    res.status(500).json({ error: 'Failed to get commitment stats' });
+  }
+});
+
+// GET /commitments — list all user's commitments
 router.get('/', async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId!;
@@ -85,7 +130,6 @@ router.get('/', async (req: AuthRequest, res: Response) => {
       contact: c.meeting.client || null,
     }));
 
-    res.json({ commitments: commitmentsWithMeetingInfo });
     res.json({ commitments: commitmentsWithMeetingInfo });
   } catch (error) {
     console.error('List commitments error:', error);

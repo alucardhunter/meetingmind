@@ -17,8 +17,7 @@ type PlanData = {
 
 function getPlanData(locale: string, plan: string): PlanData {
   const tx = translations[locale] ?? translations['en-US'];
-  const key = `landing.pricing.${plan}` as keyof typeof tx.landing.pricing;
-  return tx.landing.pricing[key] as PlanData;
+  return tx.landing.pricing[plan as keyof typeof tx.landing.pricing] as PlanData;
 }
 
 export function PricingSection() {

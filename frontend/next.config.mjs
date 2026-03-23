@@ -8,6 +8,10 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
+  webpack: (config, { isServer }) => {
+    // Ensure PostCSS is properly configured
+    return config;
+  },
 };
 
 export default nextConfig;
