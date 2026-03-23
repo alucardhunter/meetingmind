@@ -17,7 +17,7 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - light mode */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -35,6 +35,15 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
   }
+
+  /* Custom scrollbar - dark mode */
+  .dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
 }
 
 @layer components {
@@ -43,7 +52,7 @@
   }
 
   .audio-player::-webkit-media-controls-panel {
-    @apply bg-slate-100;
+    @apply bg-slate-100 dark:bg-dark-700;
   }
 }
 

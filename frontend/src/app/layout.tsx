@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/hooks/useAuth';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 import { I18nProvider } from '@/i18n';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -16,16 +17,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased bg-white text-slate-900 min-h-screen flex flex-col">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('meetingmind-theme');
+                  if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="antialiased bg-white dark:bg-dark-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
         <I18nProvider>
-          <AuthProvider>
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <Navbar />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </AuthProvider>
+          </ThemeProvider>
         </I18nProvider>
       </body>
     </html>
