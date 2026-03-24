@@ -133,6 +133,30 @@ export const exportToNotion = async (meetingId: string): Promise<{ success: bool
   return data;
 };
 
+// Mock transcription
+export const mockTranscribeMeeting = async (meetingId: string): Promise<{ message: string; meetingId: string; transcript?: string }> => {
+  const { data } = await client.post(`/meetings/${meetingId}/mock-transcribe`);
+  return data;
+};
+
+// Mock commitment extraction
+export const extractMeetingCommitments = async (meetingId: string): Promise<{ message: string; meetingId: string }> => {
+  const { data } = await client.post(`/meetings/${meetingId}/extract`);
+  return data;
+};
+
+// Ollama-powered transcription
+export const ollamaTranscribeMeeting = async (meetingId: string): Promise<{ message: string; meetingId: string; transcript?: string; source?: string }> => {
+  const { data } = await client.post(`/meetings/${meetingId}/ollama-transcribe`);
+  return data;
+};
+
+// Ollama-powered commitment extraction
+export const ollamaExtractCommitments = async (meetingId: string): Promise<{ message: string; meetingId: string; commitments?: Array<{text: string; deadline?: string; amount?: number; owner?: string}>; model?: string; success?: boolean }> => {
+  const { data } = await client.post(`/meetings/${meetingId}/ollama-extract`);
+  return data;
+};
+
 export const exportToSlack = async (meetingId: string): Promise<{ success: boolean }> => {
   const { data } = await client.post<{ success: boolean }>(`/meetings/${meetingId}/export/slack`);
   return data;

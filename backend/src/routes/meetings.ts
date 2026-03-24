@@ -6,6 +6,10 @@ import prisma from '../lib/prisma';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { transcribeMeeting, getTranscript } from '../services/transcription';
 import { summarizeMeeting, getSummary, extractCommitments } from '../services/extraction';
+import { transcribeAudio } from '../services/mockTranscription';
+import { extractCommitments as extractMockCommitments } from '../services/mockCommitmentExtraction';
+import { transcribeWithOllama } from '../services/ollamaTranscription';
+import { extractCommitmentsWithOllama } from '../services/ollamaExtraction';
 
 const router = Router();
 
@@ -291,6 +295,219 @@ router.post('/:id/transcribe', async (req: AuthRequest, res: Response) => {
   } catch (error) {
     console.error('Transcribe error:', error);
     res.status(500).json({ error: 'Failed to start transcription' });
+  }
+});
+
+// POST /:id/mock-transcribe — mock transcription using mockTranscription service
+router.post('/:id/mock-transcribe', async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { id } = req.params;
+
+    const meeting = await prisma.meeting.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!meeting) {
+      res.status(404).json({ error: 'Meeting not found' });
+      return;
+    }
+
+    // Use mock transcription service
+    const transcript = await transcribeAudio(meeting.audioUrl || '');
+
+    await prisma.meeting.update({
+      where: { id },
+      data: {
+        transcript,
+        status: 'transcribed',
+      },
+    });
+
+    res.json({ message: 'Mock transcription complete', meetingId: id, transcript });
+  } catch (error) {
+    console.error('Mock transcribe error:', error);
+    res.status(500).json({ error: 'Failed to mock transcribe' });
+  }
+});
+
+// POST /:id/extract — mock commitment extraction using mockCommitmentExtraction service
+router.post('/:id/extract', async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { id } = req.params;
+
+    const meeting = await prisma.meeting.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!meeting) {
+      res.status(404).json({ error: 'Meeting not found' });
+      return;
+    }
+
+    if (!meeting.transcript) {
+      res.status(400).json({ error: 'Meeting must be transcribed before extracting commitments' });
+      return;
+    }
+
+    // Use mock commitment extraction service
+    const mockCommitments = await extractMockCommitments(meeting.transcript);
+
+    const now = new Date();
+
+    // Delete any existing commitments for this meeting (re-extraction)
+    await prisma.commitment.deleteMany({
+      where: { meetingId: id },
+    });
+
+    // Create new commitments from mock extraction
+    const commitmentData = mockCommitments.map((c) => ({
+      meetingId: id,
+      text: c.text,
+      deadline: c.deadline ? new Date(c.deadline) : null,
+      amountValue: c.amount ? new Prisma.Decimal(c.amount) : null,
+      amountCurrency: c.amount ? '$' : null,
+      owner: c.owner || null,
+      status: c.deadline && new Date(c.deadline) < now ? 'overdue' : 'open',
+    }));
+
+    if (commitmentData.length > 0) {
+      await prisma.commitment.createMany({
+        data: commitmentData,
+      });
+    }
+
+    // Update meeting status
+    await prisma.meeting.update({
+      where: { id },
+      data: {
+        status: 'summarized',
+      },
+    });
+
+    res.json({ message: 'Mock commitment extraction complete', meetingId: id, commitments: mockCommitments });
+  } catch (error) {
+    console.error('Extract error:', error);
+    res.status(500).json({ error: 'Failed to extract commitments' });
+  }
+});
+
+// POST /:id/ollama-transcribe — Ollama-powered transcription (uses sample transcript for demo)
+router.post('/:id/ollama-transcribe', async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { id } = req.params;
+
+    const meeting = await prisma.meeting.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!meeting) {
+      res.status(404).json({ error: 'Meeting not found' });
+      return;
+    }
+
+    // Use Ollama transcription service
+    const result = await transcribeWithOllama(meeting.audioUrl || '', id);
+
+    await prisma.meeting.update({
+      where: { id },
+      data: {
+        transcript: result.transcript,
+        status: 'transcribed',
+      },
+    });
+
+    res.json({ 
+      message: 'Ollama transcription complete', 
+      meetingId: id, 
+      transcript: result.transcript,
+      source: result.source
+    });
+  } catch (error) {
+    console.error('Ollama transcribe error:', error);
+    res.status(500).json({ error: 'Failed to transcribe with Ollama' });
+  }
+});
+
+// POST /:id/ollama-extract — Ollama-powered commitment extraction
+router.post('/:id/ollama-extract', async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { id } = req.params;
+
+    const meeting = await prisma.meeting.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!meeting) {
+      res.status(404).json({ error: 'Meeting not found' });
+      return;
+    }
+
+    if (!meeting.transcript) {
+      res.status(400).json({ error: 'Meeting must be transcribed before extracting commitments' });
+      return;
+    }
+
+    // Use Ollama extraction service
+    const result = await extractCommitmentsWithOllama(meeting.transcript);
+
+    const now = new Date();
+
+    // Delete any existing commitments for this meeting (re-extraction)
+    await prisma.commitment.deleteMany({
+      where: { meetingId: id },
+    });
+
+    // Create new commitments from Ollama extraction
+    const commitmentData = result.commitments.map((c) => ({
+      meetingId: id,
+      text: c.text,
+      deadline: c.deadline ? new Date(c.deadline) : null,
+      amountValue: c.amount ? new Prisma.Decimal(c.amount) : null,
+      amountCurrency: c.amount ? '$' : null,
+      owner: c.owner || null,
+      status: c.deadline && new Date(c.deadline) < now ? 'overdue' : 'open',
+    }));
+
+    if (commitmentData.length > 0) {
+      await prisma.commitment.createMany({
+        data: commitmentData,
+      });
+    }
+
+    // Update meeting status
+    await prisma.meeting.update({
+      where: { id },
+      data: {
+        status: 'summarized',
+      },
+    });
+
+    res.json({ 
+      message: 'Ollama commitment extraction complete', 
+      meetingId: id, 
+      commitments: result.commitments,
+      model: result.model,
+      success: result.success
+    });
+  } catch (error) {
+    console.error('Ollama extract error:', error);
+    res.status(500).json({ error: 'Failed to extract commitments with Ollama' });
   }
 });
 

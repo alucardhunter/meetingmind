@@ -7,6 +7,7 @@ import { useI18n } from '@/i18n';
 import { useMeetings, useCommitments } from '@/hooks/useMeetings';
 import { TranscriptViewer } from '@/components/meetings/TranscriptViewer';
 import { CommitmentCard } from '@/components/meetings/CommitmentCard';
+import { mockTranscribeMeeting, extractMeetingCommitments, ollamaTranscribeMeeting, ollamaExtractCommitments } from '@/services/api';
 import {
   Card,
   CardHeader,
@@ -41,6 +42,8 @@ export default function MeetingDetailPage() {
   const [copied, setCopied] = useState(false);
   const [exportLoading, setExportLoading] = useState<string | null>(null);
   const [audioError, setAudioError] = useState<string>('');
+  const [transcribeLoading, setTranscribeLoading] = useState(false);
+  const [extractLoading, setExtractLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) router.push('/login');
@@ -89,6 +92,31 @@ export default function MeetingDetailPage() {
     },
     [meetingId, sendToNotion, sendToSlack]
   );
+
+  const handleMockTranscribe = useCallback(async () => {
+    setTranscribeLoading(true);
+    try {
+      await mockTranscribeMeeting(meetingId);
+      await fetchMeeting(meetingId);
+    } catch (err) {
+      console.error('Mock transcription failed:', err);
+    } finally {
+      setTranscribeLoading(false);
+    }
+  }, [meetingId, fetchMeeting]);
+
+  const handleExtractCommitments = useCallback(async () => {
+    setExtractLoading(true);
+    try {
+      await extractMeetingCommitments(meetingId);
+      await fetchCommitments({});
+      await fetchMeeting(meetingId);
+    } catch (err) {
+      console.error('Mock extraction failed:', err);
+    } finally {
+      setExtractLoading(false);
+    }
+  }, [meetingId, fetchCommitments, fetchMeeting]);
 
   const buildExportText = (m: Meeting, comms: Commitment[]): string => {
     let text = `# ${m.title}\n`;
@@ -163,6 +191,26 @@ export default function MeetingDetailPage() {
               <Badge variant={statusVariant(meeting.status)}>
                 {t(`meetings.detail.status.${meeting.status}`)}
               </Badge>
+              {meeting.status === 'pending' && (
+                <>
+                  <Button size="sm" onClick={handleMockTranscribe} loading={transcribeLoading}>
+                    <Play className="w-4 h-4 mr-1" /> Mock Transcribe
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={async () => { setTranscribeLoading(true); try { await ollamaTranscribeMeeting(meetingId); await fetchMeeting(meetingId); } catch (e) { console.error(e); } finally { setTranscribeLoading(false); } }}>
+                    🤖 Ollama Transcribe
+                  </Button>
+                </>
+              )}
+              {meeting.status === 'transcribed' && (
+                <>
+                  <Button size="sm" onClick={handleExtractCommitments} loading={extractLoading}>
+                    Extract Commitments
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={async () => { setExtractLoading(true); try { await ollamaExtractCommitments(meetingId); await fetchCommitments({}); await fetchMeeting(meetingId); } catch (e) { console.error(e); } finally { setExtractLoading(false); } }}>
+                    🤖 Ollama Extract
+                  </Button>
+                </>
+              )}
             </div>
             <div className="flex items-center gap-4 text-slate-500 flex-wrap">
               <div className="flex items-center gap-1.5">
