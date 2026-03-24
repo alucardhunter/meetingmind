@@ -2,6 +2,7 @@
  * Transcription Service
  * 
  * Uses OpenAI Whisper API for audio transcription.
+ * NO fallbacks - errors are thrown directly.
  */
 
 import fs from 'fs';
@@ -13,23 +14,25 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export interface TranscriptionResult {
   transcript: string;
-  source: 'openai' | 'sample' | 'error';
-  error?: string;
+  source: 'openai';
 }
 
-// Sample transcript for demo purposes when transcription fails
-export const SAMPLE_TRANSCRIPT = `Meeting with John Smith on March 15th, 2026.
-
-John: I need the project proposal by next Friday, March 21st.
-John: The budget should be around $15,000.
-John: Sarah will handle the design work.
-
-Sarah: I can deliver the designs by Thursday, March 20th.
-
-John: Let's schedule a follow-up for next week.`;
+/**
+ * Custom error class for transcription errors
+ */
+export class TranscriptionError extends Error {
+  constructor(
+    message: string,
+    public readonly cause?: string
+  ) {
+    super(message);
+    this.name = 'TranscriptionError';
+  }
+}
 
 /**
  * Transcribe audio using OpenAI Whisper API.
+ * Throws TranscriptionError on any failure - no fallbacks.
  */
 export async function transcribeWithOllama(
   audioPath: string,
@@ -37,20 +40,20 @@ export async function transcribeWithOllama(
 ): Promise<TranscriptionResult> {
   const fullPath = path.resolve(process.cwd(), audioPath);
 
+  // Check file exists
   if (!fs.existsSync(fullPath)) {
-    return {
-      transcript: SAMPLE_TRANSCRIPT,
-      source: 'sample',
-      error: `File not found: ${fullPath}`,
-    };
+    throw new TranscriptionError(
+      `Audio file not found: ${fullPath}`,
+      'FILE_NOT_FOUND'
+    );
   }
 
+  // Check API key
   if (!OPENAI_API_KEY) {
-    return {
-      transcript: SAMPLE_TRANSCRIPT,
-      source: 'sample',
-      error: 'OPENAI_API_KEY not configured',
-    };
+    throw new TranscriptionError(
+      'OPENAI_API_KEY environment variable is not configured',
+      'MISSING_API_KEY'
+    );
   }
 
   const formData = new FormData();
@@ -74,12 +77,11 @@ export async function transcribeWithOllama(
 
     const transcript = response.data.text || '';
 
-    if (!transcript) {
-      return {
-        transcript: SAMPLE_TRANSCRIPT,
-        source: 'sample',
-        error: 'Empty transcript from OpenAI Whisper',
-      };
+    if (!transcript || transcript.trim().length === 0) {
+      throw new TranscriptionError(
+        'OpenAI Whisper returned empty transcript',
+        'EMPTY_RESPONSE'
+      );
     }
 
     return {
@@ -87,17 +89,27 @@ export async function transcribeWithOllama(
       source: 'openai',
     };
   } catch (error: any) {
-    return {
-      transcript: SAMPLE_TRANSCRIPT,
-      source: 'sample',
-      error: `OpenAI Whisper transcription failed: ${error.message}`,
-    };
-  }
-}
+    // If it's already our error, rethrow
+    if (error instanceof TranscriptionError) {
+      throw error;
+    }
 
-/**
- * Get a sample transcript for testing
- */
-export function getSampleTranscript(): string {
-  return SAMPLE_TRANSCRIPT;
+    // Wrap axios errors
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      const statusText = error.response?.statusText;
+      const responseData = error.response?.data;
+
+      throw new TranscriptionError(
+        `OpenAI Whisper API failed: ${status} ${statusText}`,
+        `AXIOS_ERROR_${status}`
+      );
+    }
+
+    // Wrap other errors
+    throw new TranscriptionError(
+      `Transcription failed: ${error.message || 'Unknown error'}`,
+      'UNKNOWN_ERROR'
+    );
+  }
 }

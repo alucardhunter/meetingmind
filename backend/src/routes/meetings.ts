@@ -399,7 +399,7 @@ router.post('/:id/extract', async (req: AuthRequest, res: Response) => {
   }
 });
 
-// POST /:id/ollama-transcribe — Ollama-powered transcription (uses sample transcript for demo)
+// POST /:id/ollama-transcribe — Ollama-powered transcription (uses OpenAI Whisper)
 router.post('/:id/ollama-transcribe', async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId;
@@ -436,7 +436,8 @@ router.post('/:id/ollama-transcribe', async (req: AuthRequest, res: Response) =>
     });
   } catch (error) {
     console.error('Ollama transcribe error:', error);
-    res.status(500).json({ error: 'Failed to transcribe with Ollama' });
+    const message = error instanceof Error ? error.message : 'Failed to transcribe with Ollama';
+    res.status(500).json({ error: message });
   }
 });
 
@@ -546,7 +547,9 @@ router.post('/:id/ollama-extract', async (req: AuthRequest, res: Response) => {
     });
   } catch (error) {
     console.error('Ollama extract error:', error);
-    res.status(500).json({ error: 'Failed to extract commitments with Ollama' });
+    const message = error instanceof Error ? error.message : 'Failed to extract commitments with Ollama';
+    const statusCode = error instanceof Error && error.name === 'OllamaApiError' ? 502 : 500;
+    res.status(statusCode).json({ error: message });
   }
 });
 

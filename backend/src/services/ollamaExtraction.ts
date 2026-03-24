@@ -2,6 +2,8 @@
  * Ollama Commitment Extraction Service
  * 
  * Uses Ollama's chat API to extract commitments from meeting transcripts.
+ * Endpoint: https://ollama.com/api/chat
+ * Model: minimax-m2.7:cloud
  */
 
 import { ollamaConfig } from '../config/ollama';
@@ -40,17 +42,24 @@ export async function extractCommitmentsWithOllama(
   transcript: string
 ): Promise<ExtractionResult> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 60000); // Increased to 60s for cloud models
+  const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout for cloud models
+
+  const endpoint = `${ollamaConfig.baseUrl}/chat`;
+  const model = ollamaConfig.model;
+
+  console.log(`[OllamaExtraction] Calling endpoint: ${endpoint}`);
+  console.log(`[OllamaExtraction] Model: ${model}`);
+  console.log(`[OllamaExtraction] API Key present: ${ollamaConfig.apiKey ? 'YES' : 'NO'}`);
 
   try {
-    const response = await fetch(`${ollamaConfig.baseUrl}/chat`, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${ollamaConfig.apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: ollamaConfig.model,
+        model: model,
         messages: [
           {
             role: 'system',
@@ -78,10 +87,13 @@ Rules:
 
     clearTimeout(timeout);
 
+    console.log(`[OllamaExtraction] Response status: ${response.status}`);
+
     if (!response.ok) {
       const errorBody = await response.text();
+      console.error(`[OllamaExtraction] API error response: ${errorBody}`);
       throw new OllamaApiError(
-        `Ollama API error: ${response.status}`,
+        `Ollama API error: ${response.status} ${response.statusText}`,
         response.status,
         errorBody
       );
@@ -89,31 +101,46 @@ Rules:
 
     const data = await response.json() as { message?: { content?: string } };
 
+    console.log(`[OllamaExtraction] Response data keys: ${Object.keys(data)}`);
+
     const content = data.message?.content || '[]';
+    console.log(`[OllamaExtraction] Content length: ${content.length}`);
 
     // Parse JSON from response
-    const commitments = JSON.parse(content);
+    let commitments: ExtractedCommitment[];
+    try {
+      commitments = JSON.parse(content);
+    } catch (parseError) {
+      console.error(`[OllamaExtraction] JSON parse error. Content was: ${content.substring(0, 500)}`);
+      throw new OllamaApiError(`Failed to parse JSON response: ${content.substring(0, 200)}`);
+    }
+
     if (!Array.isArray(commitments)) {
       throw new OllamaApiError('Invalid response format: expected JSON array');
     }
 
+    console.log(`[OllamaExtraction] Extracted ${commitments.length} commitments`);
+
     return {
       commitments,
-      model: ollamaConfig.model,
+      model: model,
       success: true
     };
   } catch (error) {
     clearTimeout(timeout);
 
     if (error instanceof OllamaApiError) {
+      console.error(`[OllamaExtraction] OllamaApiError: ${error.message}, status: ${error.statusCode}`);
       throw error;
     }
 
     if (error instanceof Error && error.name === 'AbortError') {
+      console.error(`[OllamaExtraction] Request timeout after 60s`);
       throw new OllamaApiError('Request timeout: Ollama API did not respond within 60 seconds');
     }
 
     const errorMessage = error instanceof Error ? error.message : 'Unknown error calling Ollama API';
+    console.error(`[OllamaExtraction] Unknown error: ${errorMessage}`);
     throw new OllamaApiError(errorMessage);
   }
 }
