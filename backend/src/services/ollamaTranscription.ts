@@ -38,7 +38,12 @@ export async function transcribeWithOllama(
   audioPath: string,
   _meetingId: string
 ): Promise<TranscriptionResult> {
-  const fullPath = path.resolve(process.cwd(), audioPath);
+  // Extract filename from URL if full URL is passed
+  let filename = audioPath;
+  if (audioPath.startsWith('http')) {
+    filename = audioPath.split('/uploads/').pop() || audioPath;
+  }
+  const fullPath = path.resolve(process.cwd(), 'uploads', filename);
 
   // Check file exists
   if (!fs.existsSync(fullPath)) {
