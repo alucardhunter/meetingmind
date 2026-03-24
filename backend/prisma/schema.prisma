@@ -34,7 +34,7 @@ model Meeting {
 model Commitment {
   id             String    @id @default(uuid())
   meetingId      String
-  meeting        Meeting   @relation(fields: [meetingId], references: [id])
+  meeting        Meeting   @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   text           String    // the commitment text
   deadline       DateTime? // extracted deadline (if found)
   amountValue    Decimal?  @db.Decimal(12, 2) // extracted $ value

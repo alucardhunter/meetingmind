@@ -6,6 +6,8 @@
  * For audio transcription, you would need a dedicated speech-to-text service.
  */
 
+import fs from 'fs';
+import path from 'path';
 import { ollamaConfig } from '../config/ollama';
 
 // Sample transcript for demo purposes when audio transcription is not available
@@ -31,15 +33,23 @@ export interface TranscriptionResult {
  * In production, you would integrate with a dedicated STT service.
  */
 export async function transcribeWithOllama(
-  audioUrl: string,
+  audioPath: string,
   _meetingId: string
 ): Promise<TranscriptionResult> {
-  // For demo purposes, return the sample transcript
-  // In a real implementation, you would:
-  // 1. Download the audio file from audioUrl
-  // 2. Send it to a speech-to-text service (like OpenAI Whisper, DeepGram, etc.)
-  // 3. Return the transcription
-  
+  // Resolve the audio file path
+  const audioUrl = path.join(process.cwd(), audioPath);
+
+  // For now, use sample transcript if file doesn't exist
+  // Later: integrate with Whisper API or Ollama whisper model
+  if (!fs.existsSync(audioUrl)) {
+    return {
+      transcript: SAMPLE_TRANSCRIPT,
+      source: 'sample',
+    };
+  }
+
+  // TODO: Use Whisper API or Ollama whisper model
+  // For now, return sample transcript
   return {
     transcript: SAMPLE_TRANSCRIPT,
     source: 'sample',
