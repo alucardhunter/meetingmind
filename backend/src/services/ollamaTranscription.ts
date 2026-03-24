@@ -38,15 +38,15 @@ export async function transcribeWithOllama(
   audioPath: string,
   _meetingId: string
 ): Promise<TranscriptionResult> {
-  // Extract filename from URL or path
+  // Extract just the filename from path or URL
   let filename = audioPath;
   if (audioPath.startsWith('http')) {
     // Full URL: extract path after /uploads/
     const match = audioPath.match(/\/uploads\/(.+)$/);
     filename = match ? match[1] : audioPath;
-  } else if (audioPath.startsWith('uploads/')) {
-    // Path already has uploads/ prefix, strip it
-    filename = audioPath.replace(/^uploads\//, '');
+  } else if (filename.includes('/')) {
+    // Strip any path prefix, keep only filename
+    filename = filename.split('/').pop() || filename;
   }
   const fullPath = path.resolve(process.cwd(), 'uploads', filename);
 
@@ -84,6 +84,10 @@ export async function transcribeWithOllama(
         maxContentLength: Infinity,
       }
     );
+
+    console.error('DEBUG: Whisper response status:', response.status);
+    console.error('DEBUG: Whisper response data:', JSON.stringify(response.data));
+    console.error('DEBUG: Whisper response headers:', JSON.stringify(response.headers));
 
     const transcript = response.data.text || '';
 
