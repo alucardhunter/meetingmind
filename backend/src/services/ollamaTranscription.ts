@@ -6,8 +6,7 @@
  * For audio transcription, you would need a dedicated speech-to-text service.
  */
 
-const OLLAMA_API = 'https://ollama.com/api';
-const API_KEY = '94d743a0183641deae3fcff2ae321e76.DJ6QLChak2unKJiJUk2qPQuG';
+import { ollamaConfig } from '../config/ollama';
 
 // Sample transcript for demo purposes when audio transcription is not available
 export const SAMPLE_TRANSCRIPT = `Meeting with John Smith on March 15th, 2026.
@@ -40,8 +39,6 @@ export async function transcribeWithOllama(
   // 1. Download the audio file from audioUrl
   // 2. Send it to a speech-to-text service (like OpenAI Whisper, DeepGram, etc.)
   // 3. Return the transcription
-  
-  console.log(`[OllamaTranscription] Using sample transcript for demo`);
   
   return {
     transcript: SAMPLE_TRANSCRIPT,
