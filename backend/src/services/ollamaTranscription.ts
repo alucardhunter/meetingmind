@@ -62,13 +62,8 @@ export async function transcribeWithOllama(
   // Resolve the audio file path
   const fullPath = path.resolve(process.cwd(), audioPath);
 
-  console.log('[Ollama Transcription] Attempting transcription for:', fullPath);
-  console.log('[Ollama Transcription] Ollama API:', OLLAMA_API);
-  console.log('[Ollama Transcription] API Key present:', !!API_KEY, '(length:', API_KEY?.length || 0, ')');
-
   // Check if file exists
   if (!fs.existsSync(fullPath)) {
-    console.log('[Ollama Transcription] File not found, using sample transcript');
     return {
       transcript: SAMPLE_TRANSCRIPT,
       source: 'sample',
@@ -80,9 +75,7 @@ export async function transcribeWithOllama(
   let audioBuffer: Buffer;
   try {
     audioBuffer = fs.readFileSync(fullPath);
-    console.log('[Ollama Transcription] File size:', audioBuffer.length, 'bytes');
   } catch (readError) {
-    console.error('[Ollama Transcription] Failed to read audio file:', readError);
     return {
       transcript: SAMPLE_TRANSCRIPT,
       source: 'sample',
@@ -93,8 +86,6 @@ export async function transcribeWithOllama(
   const base64Audio = audioBuffer.toString('base64');
   const ext = path.extname(fullPath);
   const mimeType = getMimeType(ext);
-
-  console.log('[Ollama Transcription] MIME type:', mimeType);
 
   try {
     // Attempt to use Ollama's audio transcription endpoint
@@ -112,11 +103,8 @@ export async function transcribeWithOllama(
       }),
     });
 
-    console.log('[Ollama Transcription] Response status:', response.status);
-
     if (!response.ok) {
       const errorBody = await response.text();
-      console.error('[Ollama Transcription] Ollama API error:', response.status, errorBody);
       
       // Ollama Cloud doesn't support audio - fall back to sample
       return {
@@ -130,7 +118,6 @@ export async function transcribeWithOllama(
     const transcript = data.text || '';
 
     if (!transcript) {
-      console.log('[Ollama Transcription] Empty response, using sample');
       return {
         transcript: SAMPLE_TRANSCRIPT,
         source: 'sample',
@@ -138,15 +125,12 @@ export async function transcribeWithOllama(
       };
     }
 
-    console.log('[Ollama Transcription] Success, transcript length:', transcript.length);
     return {
       transcript,
       source: 'ollama',
     };
   } catch (error) {
     // Network error or other issue - Ollama Cloud doesn't support audio transcription
-    console.error('[Ollama Transcription] Request failed:', error);
-    
     return {
       transcript: SAMPLE_TRANSCRIPT,
       source: 'sample',

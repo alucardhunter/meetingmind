@@ -43,12 +43,6 @@ export async function extractCommitmentsWithOllama(
   const timeout = setTimeout(() => controller.abort(), 60000); // Increased to 60s for cloud models
 
   try {
-    // Log configuration for debugging
-    console.log('[Ollama Extraction] Starting extraction');
-    console.log('[Ollama Extraction] Base URL:', ollamaConfig.baseUrl);
-    console.log('[Ollama Extraction] Model:', ollamaConfig.model);
-    console.log('[Ollama Extraction] API Key present:', !!ollamaConfig.apiKey, '(length:', ollamaConfig.apiKey?.length || 0, ')');
-
     const response = await fetch(`${ollamaConfig.baseUrl}/chat`, {
       method: 'POST',
       headers: {
@@ -84,11 +78,8 @@ Rules:
 
     clearTimeout(timeout);
 
-    console.log('[Ollama Extraction] Response status:', response.status);
-
     if (!response.ok) {
       const errorBody = await response.text();
-      console.error('[Ollama Extraction] API Error:', response.status, errorBody);
       throw new OllamaApiError(
         `Ollama API error: ${response.status}`,
         response.status,
@@ -97,18 +88,14 @@ Rules:
     }
 
     const data = await response.json() as { message?: { content?: string } };
-    console.log('[Ollama Extraction] Raw response:', JSON.stringify(data));
 
     const content = data.message?.content || '[]';
-    console.log('[Ollama Extraction] Content:', content);
 
     // Parse JSON from response
     const commitments = JSON.parse(content);
     if (!Array.isArray(commitments)) {
       throw new OllamaApiError('Invalid response format: expected JSON array');
     }
-
-    console.log('[Ollama Extraction] Extracted', commitments.length, 'commitments');
 
     return {
       commitments,
@@ -119,17 +106,14 @@ Rules:
     clearTimeout(timeout);
 
     if (error instanceof OllamaApiError) {
-      console.error('[Ollama Extraction] OllamaApiError:', error.message, 'Status:', error.statusCode);
       throw error;
     }
 
     if (error instanceof Error && error.name === 'AbortError') {
-      console.error('[Ollama Extraction] Request timeout');
       throw new OllamaApiError('Request timeout: Ollama API did not respond within 60 seconds');
     }
 
     const errorMessage = error instanceof Error ? error.message : 'Unknown error calling Ollama API';
-    console.error('[Ollama Extraction] Unknown error:', errorMessage, error);
     throw new OllamaApiError(errorMessage);
   }
 }
