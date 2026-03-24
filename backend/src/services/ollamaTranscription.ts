@@ -38,10 +38,15 @@ export async function transcribeWithOllama(
   audioPath: string,
   _meetingId: string
 ): Promise<TranscriptionResult> {
-  // Extract filename from URL if full URL is passed
+  // Extract filename from URL or path
   let filename = audioPath;
   if (audioPath.startsWith('http')) {
-    filename = audioPath.split('/uploads/').pop() || audioPath;
+    // Full URL: extract path after /uploads/
+    const match = audioPath.match(/\/uploads\/(.+)$/);
+    filename = match ? match[1] : audioPath;
+  } else if (audioPath.startsWith('uploads/')) {
+    // Path already has uploads/ prefix, strip it
+    filename = audioPath.replace(/^uploads\//, '');
   }
   const fullPath = path.resolve(process.cwd(), 'uploads', filename);
 
