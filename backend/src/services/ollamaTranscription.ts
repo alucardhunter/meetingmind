@@ -86,10 +86,18 @@ export async function transcribeWithOllama(
     );
 
     console.error('DEBUG: Whisper response status:', response.status);
-    console.error('DEBUG: Whisper response data:', JSON.stringify(response.data));
-    console.error('DEBUG: Whisper response headers:', JSON.stringify(response.headers));
+    console.error('DEBUG: Whisper response data type:', typeof response.data);
+    console.error('DEBUG: Whisper response data:', typeof response.data === 'string' ? response.data.substring(0, 100) : JSON.stringify(response.data));
 
-    const transcript = response.data.text || '';
+    // Handle both JSON {text: "..."} and plain text responses
+    let transcript = '';
+    if (typeof response.data === 'string') {
+      // Plain text response
+      transcript = response.data;
+    } else {
+      // JSON response
+      transcript = response.data.text || '';
+    }
 
     if (!transcript || transcript.trim().length === 0) {
       throw new TranscriptionError(
