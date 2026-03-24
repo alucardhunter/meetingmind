@@ -59,44 +59,60 @@ export async function extractCommitmentsWithOllama(
         messages: [
           {
             role: 'system',
-            content: `You are a commitment extraction AI. Extract all commitments from the transcript.
-Return a JSON array with this format:
-[{"text": "...", "deadline": "YYYY-MM-DD", "amount": 123, "owner": "..."}]
+            content: `You are a commitment extraction AI. Analyze meeting transcripts and extract ALL commitments made by participants.
+
+Extract commitments using this EXACT JSON format (no markdown, no explanation):
+{"commitments": [{"text": "exact commitment text", "deadline": "YYYY-MM-DD or null", "amount": number or null, "owner": "person name or null"}]}
 
 Rules:
-- Only extract explicit commitments (promises, tasks, amounts, deadlines)
-- deadline format must be YYYY-MM-DD (convert natural language like "next Friday" to YYYY-MM-DD)
-- amount should be a number if mentioned (e.g., 15000 for $15,000)
-- owner is who made the commitment
-- If no commitment found, return empty array
-- Extract exact wording of the commitment`
+- A commitment is any promise, task, or agreement someone explicitly says they will do
+- Include: will do X, agreed to Y, needs to Z, promised to W, going to V, should U
+- text: the exact commitment text or a concise summary (max 200 chars)
+- deadline: YYYY-MM-DD format - convert natural language dates like "March 30th", "next Friday", "by the 15th" to YYYY-MM-DD. Use null if no deadline mentioned
+- amount: numeric value only (e.g., 15000 not $15000). Use null if no dollar amount mentioned
+- owner: the name of the person who made the commitment (typically the speaker before colon or "I will" speaker)
+- If no commitments found, return: {"commitments": []}
+- Only extract real commitments, not general discussion or opinions`
           },
           {
             role: 'user',
             content: transcript
           }
         ],
-        stream: false
+        stream: false,
+        format: 'json'
       }),
       signal: controller.signal
     });
 
     clearTimeout(timeout);
 
-    const data = await response.json() as { message?: { content?: string } };
+    if (!response.ok) {
+      const body = await response.text();
+      throw new OllamaApiError(`Ollama API error: ${response.status} ${response.statusText}`, response.status, body);
+    }
 
-    const content = data.message?.content || '[]';
+    const data = await response.json() as { message?: { content?: string } };
+    let content = data.message?.content || '{"commitments": []}';
+
+    // Try to extract JSON from content if it has extra text around it
+    const jsonMatch = content.match(/\{[\s\S]*"commitments"[\s\S]*\}/);
+    if (jsonMatch) {
+      content = jsonMatch[0];
+    }
 
     // Parse JSON from response
-    let commitments: ExtractedCommitment[];
+    let parsed: { commitments: ExtractedCommitment[] };
     try {
-      commitments = JSON.parse(content);
+      parsed = JSON.parse(content);
     } catch (parseError) {
       throw new OllamaApiError(`Failed to parse JSON response: ${content.substring(0, 200)}`);
     }
 
+    const commitments = parsed.commitments || [];
+
     if (!Array.isArray(commitments)) {
-      throw new OllamaApiError('Invalid response format: expected JSON array');
+      throw new OllamaApiError('Invalid response format: expected commitments array');
     }
 
     return {
