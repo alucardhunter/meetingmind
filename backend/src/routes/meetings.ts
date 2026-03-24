@@ -8,8 +8,8 @@ import { transcribeMeeting, getTranscript } from '../services/transcription';
 import { summarizeMeeting, getSummary, extractCommitments } from '../services/extraction';
 import { transcribeAudio } from '../services/mockTranscription';
 import { extractCommitments as extractMockCommitments } from '../services/mockCommitmentExtraction';
-import { transcribeWithOllama } from '../services/ollamaTranscription';
-import { extractCommitmentsWithOllama } from '../services/ollamaExtraction';
+import { transcribeWithOllama, TranscriptionError } from '../services/ollamaTranscription';
+import { extractCommitmentsWithOllama, OllamaApiError } from '../services/ollamaExtraction';
 
 const router = Router();
 
@@ -435,6 +435,10 @@ router.post('/:id/ollama-transcribe', async (req: AuthRequest, res: Response) =>
       source: result.source
     });
   } catch (error) {
+    if (error instanceof TranscriptionError) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+      return;
+    }
     console.error('Ollama transcribe error:', error);
     res.status(500).json({ error: 'Failed to transcribe with Ollama' });
   }
@@ -545,6 +549,10 @@ router.post('/:id/ollama-extract', async (req: AuthRequest, res: Response) => {
       success: result.success
     });
   } catch (error) {
+    if (error instanceof OllamaApiError) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+      return;
+    }
     console.error('Ollama extract error:', error);
     res.status(500).json({ error: 'Failed to extract commitments with Ollama' });
   }
