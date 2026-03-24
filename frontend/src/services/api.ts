@@ -157,6 +157,12 @@ export const ollamaExtractCommitments = async (meetingId: string): Promise<{ mes
   return data;
 };
 
+// Manual transcript input
+export const setMeetingTranscript = async (meetingId: string, transcript: string): Promise<{ message: string; meetingId: string }> => {
+  const { data } = await client.post(`/meetings/${meetingId}/transcript`, { transcript });
+  return data;
+};
+
 export const exportToSlack = async (meetingId: string): Promise<{ success: boolean }> => {
   const { data } = await client.post<{ success: boolean }>(`/meetings/${meetingId}/export/slack`);
   return data;

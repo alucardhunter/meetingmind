@@ -440,6 +440,45 @@ router.post('/:id/ollama-transcribe', async (req: AuthRequest, res: Response) =>
   }
 });
 
+// POST /:id/transcript — manually set the transcript text
+router.post('/:id/transcript', async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { id } = req.params;
+    const { transcript } = req.body;
+
+    if (!transcript || typeof transcript !== 'string') {
+      res.status(400).json({ error: 'Transcript text is required' });
+      return;
+    }
+
+    const meeting = await prisma.meeting.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!meeting) {
+      res.status(404).json({ error: 'Meeting not found' });
+      return;
+    }
+
+    await prisma.meeting.update({
+      where: { id },
+      data: {
+        transcript: transcript.trim(),
+        status: 'transcribed',
+      },
+    });
+
+    res.json({ message: 'Transcript saved', meetingId: id });
+  } catch (error) {
+    console.error('Set transcript error:', error);
+    res.status(500).json({ error: 'Failed to save transcript' });
+  }
+});
+
 // POST /:id/ollama-extract — Ollama-powered commitment extraction
 router.post('/:id/ollama-extract', async (req: AuthRequest, res: Response) => {
   try {

@@ -7,7 +7,7 @@ import { useI18n } from '@/i18n';
 import { useMeetings, useCommitments } from '@/hooks/useMeetings';
 import { TranscriptViewer } from '@/components/meetings/TranscriptViewer';
 import { CommitmentCard } from '@/components/meetings/CommitmentCard';
-import { mockTranscribeMeeting, extractMeetingCommitments, ollamaTranscribeMeeting, ollamaExtractCommitments } from '@/services/api';
+import { mockTranscribeMeeting, extractMeetingCommitments, ollamaTranscribeMeeting, ollamaExtractCommitments, setMeetingTranscript } from '@/services/api';
 import {
   Card,
   CardHeader,
@@ -27,6 +27,8 @@ import {
   CalendarDays,
   DollarSign,
   Play,
+  FileText,
+  X,
 } from 'lucide-react';
 import type { Meeting, Commitment } from '@/types';
 
@@ -44,6 +46,9 @@ export default function MeetingDetailPage() {
   const [audioError, setAudioError] = useState<string>('');
   const [transcribeLoading, setTranscribeLoading] = useState(false);
   const [extractLoading, setExtractLoading] = useState(false);
+  const [showManualTranscript, setShowManualTranscript] = useState(false);
+  const [manualTranscript, setManualTranscript] = useState('');
+  const [manualTranscriptLoading, setManualTranscriptLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) router.push('/login');
@@ -104,6 +109,21 @@ export default function MeetingDetailPage() {
       setTranscribeLoading(false);
     }
   }, [meetingId, fetchMeeting]);
+
+  const handleManualTranscript = useCallback(async () => {
+    if (!manualTranscript.trim()) return;
+    setManualTranscriptLoading(true);
+    try {
+      await setMeetingTranscript(meetingId, manualTranscript);
+      await fetchMeeting(meetingId);
+      setShowManualTranscript(false);
+      setManualTranscript('');
+    } catch (err) {
+      console.error('Manual transcript failed:', err);
+    } finally {
+      setManualTranscriptLoading(false);
+    }
+  }, [meetingId, manualTranscript, fetchMeeting]);
 
   const handleExtractCommitments = useCallback(async () => {
     setExtractLoading(true);
@@ -199,6 +219,15 @@ export default function MeetingDetailPage() {
                   <Button size="sm" variant="outline" onClick={async () => { setTranscribeLoading(true); try { await ollamaTranscribeMeeting(meetingId); await fetchMeeting(meetingId); } catch (e) { console.error(e); } finally { setTranscribeLoading(false); } }}>
                     🤖 Ollama Transcribe
                   </Button>
+                  {!showManualTranscript ? (
+                    <Button size="sm" variant="outline" onClick={() => setShowManualTranscript(true)}>
+                      <FileText className="w-4 h-4 mr-1" /> Enter Transcript Manually
+                    </Button>
+                  ) : (
+                    <Button size="sm" variant="ghost" onClick={() => { setShowManualTranscript(false); setManualTranscript(''); }}>
+                      <X className="w-4 h-4 mr-1" /> Cancel
+                    </Button>
+                  )}
                 </>
               )}
               {meeting.status === 'transcribed' && (
@@ -235,6 +264,43 @@ export default function MeetingDetailPage() {
       </div>
 
       {error && <Alert variant="error" className="mb-6">{error}</Alert>}
+
+      {/* Manual Transcript Input */}
+      {showManualTranscript && (
+        <Card className="mb-8 border-2 border-indigo-200">
+          <CardHeader>
+            <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-indigo-600" />
+              Enter Transcript Manually
+            </h3>
+            <p className="text-sm text-slate-500 mt-1">
+              Paste or type the meeting transcript below. The Ollama extract button will use this transcript.
+            </p>
+          </CardHeader>
+          <CardBody>
+            <textarea
+              className="w-full h-48 p-3 border border-slate-300 rounded-lg text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder={`Meeting title on March 15th, 2026.
+
+John: I need the project proposal by next Friday, March 21st.
+John: The budget should be around $15,000.
+Sarah: I can deliver the designs by Thursday, March 20th.
+
+John: Let's schedule a follow-up for next week.`}
+              value={manualTranscript}
+              onChange={(e) => setManualTranscript(e.target.value)}
+            />
+            <div className="flex justify-end gap-3 mt-3">
+              <Button variant="ghost" onClick={() => { setShowManualTranscript(false); setManualTranscript(''); }}>
+                Cancel
+              </Button>
+              <Button onClick={handleManualTranscript} loading={manualTranscriptLoading} disabled={!manualTranscript.trim()}>
+                Save Transcript
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
+      )}
 
       {/* Audio Player */}
       {meeting.audioUrl && (
