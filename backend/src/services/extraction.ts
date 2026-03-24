@@ -133,7 +133,7 @@ Return ONLY valid JSON with this exact structure (no markdown, no explanation):
     }
     return [];
   } catch (error) {
-    console.error('GPT extraction error:', error);
+    // GPT extraction error — return empty array
     return [];
   }
 }
