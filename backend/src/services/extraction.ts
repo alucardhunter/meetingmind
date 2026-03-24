@@ -306,5 +306,3 @@ export const getSummary = async (meetingId: string): Promise<MeetingSummary | nu
 
   return meeting.summary as MeetingSummary | null;
 };
-mmary as MeetingSummary | null;
-};
