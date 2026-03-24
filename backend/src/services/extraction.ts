@@ -269,7 +269,7 @@ export const summarizeMeeting = async (meetingId: string): Promise<void> => {
     },
   });
 
-  console.log(`Extracted ${commitments.length} commitments for meeting ${meetingId}`);
+
 };
 
 export const extractCommitments = async (meetingId: string): Promise<ExtractedCommitment[]> => {
@@ -305,4 +305,6 @@ export const getSummary = async (meetingId: string): Promise<MeetingSummary | nu
   }
 
   return meeting.summary as MeetingSummary | null;
+};
+mmary as MeetingSummary | null;
 };
