@@ -180,12 +180,12 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
   }
 });
 
-// PATCH /api/commitments/:id — update status or deadline
+// PATCH /api/commitments/:id — update status, deadline, or text
 router.patch('/:id', async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId!;
     const { id } = req.params;
-    const { status, deadline } = req.body;
+    const { text, deadline, status } = req.body;
 
     const commitment = await prisma.commitment.findUnique({
       where: { id },
@@ -207,6 +207,10 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
     }
 
     const updateData: any = {};
+
+    if (text !== undefined) {
+      updateData.text = typeof text === 'string' ? text.trim() : text;
+    }
 
     if (status !== undefined) {
       if (!['open', 'fulfilled', 'overdue'].includes(status)) {

@@ -241,7 +241,7 @@ export const translations: Record<string, TranslationDict> = {
         dropzone: {
           title: 'Arraste seu arquivo de áudio aqui',
           subtitle: 'ou clique para procurar',
-          formats: 'Suporta MP3, WAV, M4A, OGG (máx 500MB)',
+          formats: 'Suporta MP3, WAV, M4A, OGG, MP4, MOV, MKV (máx 500MB)',
         },
         record: {
           title: 'Ou grave ao vivo',
@@ -569,7 +569,7 @@ export const translations: Record<string, TranslationDict> = {
         dropzone: {
           title: 'Arraste o seu ficheiro de áudio aqui',
           subtitle: 'ou clique para procurar',
-          formats: 'Suporta MP3, WAV, M4A, OGG (máx 500MB)',
+          formats: 'Suporta MP3, WAV, M4A, OGG, MP4, MOV, MKV (máx 500MB)',
         },
         record: {
           title: 'Ou grave ao vivo',
@@ -896,7 +896,7 @@ export const translations: Record<string, TranslationDict> = {
         dropzone: {
           title: 'Arrastra tu archivo de audio aquí',
           subtitle: 'o haz clic para buscar',
-          formats: 'Soporta MP3, WAV, M4A, OGG (máx 500MB)',
+          formats: 'Soporta MP3, WAV, M4A, OGG, MP4, MOV, MKV (máx 500MB)',
         },
         record: {
           title: 'O graba en vivo',

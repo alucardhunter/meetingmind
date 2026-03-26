@@ -211,7 +211,7 @@ export const enUS = {
       dropzone: {
         title: 'Drop your audio file here',
         subtitle: 'or click to browse',
-        formats: 'Supports MP3, WAV, M4A, OGG (max 500MB)',
+        formats: 'Supports MP3, WAV, M4A, OGG, MP4, MOV, MKV (max 500MB)',
       },
       record: {
         title: 'Or record live',

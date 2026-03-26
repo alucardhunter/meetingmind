@@ -7,7 +7,7 @@ import { useI18n } from '@/i18n';
 import { useMeetings, useCommitments } from '@/hooks/useMeetings';
 import { TranscriptViewer } from '@/components/meetings/TranscriptViewer';
 import { CommitmentCard } from '@/components/meetings/CommitmentCard';
-import { mockTranscribeMeeting, extractMeetingCommitments, ollamaTranscribeMeeting, ollamaExtractCommitments, setMeetingTranscript } from '@/services/api';
+import { mockTranscribeMeeting, extractMeetingCommitments, ollamaTranscribeMeeting, ollamaExtractCommitments, setMeetingTranscript, updateCommitment } from '@/services/api';
 import {
   Card,
   CardHeader,
@@ -67,6 +67,14 @@ export default function MeetingDetailPage() {
       await toggleCommitmentStatus(commitment);
     },
     [toggleCommitmentStatus]
+  );
+
+  const handleUpdate = useCallback(
+    async (id: string, updates: { text?: string; deadline?: string }) => {
+      await updateCommitment(id, updates);
+      await fetchCommitments({});
+    },
+    [fetchCommitments]
   );
 
   const handleCopy = useCallback(() => {
@@ -332,7 +340,7 @@ John: Let's schedule a follow-up for next week.`}
         {meetingCommitments.length > 0 ? (
           <div className="space-y-4">
             {meetingCommitments.map((c) => (
-              <CommitmentCard key={c.id} commitment={c} onToggleStatus={handleToggle} />
+              <CommitmentCard key={c.id} commitment={c} onToggleStatus={handleToggle} onUpdate={handleUpdate} />
             ))}
           </div>
         ) : (
