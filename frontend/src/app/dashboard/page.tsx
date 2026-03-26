@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useMeetings, useCommitments } from '@/hooks/useMeetings';
 import { useI18n } from '@/i18n';
-import { CommitmentCard } from '@/components/meetings/CommitmentCard';
+import { CommitmentCard } from '@/components/commitments';
 import { MeetingsList } from '@/components/meetings';
 import { Card, CardBody, Button, Spinner } from '@/components/ui';
 import { Plus, AlertTriangle, CheckCircle2, Circle, ListTodo } from 'lucide-react';

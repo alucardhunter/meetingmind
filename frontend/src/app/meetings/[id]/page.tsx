@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useI18n } from '@/i18n';
 import { useMeetings, useCommitments } from '@/hooks/useMeetings';
 import { TranscriptViewer } from '@/components/meetings/TranscriptViewer';
-import { CommitmentCard } from '@/components/meetings/CommitmentCard';
+import { CommitmentCard } from '@/components/commitments';
 import { mockTranscribeMeeting, extractMeetingCommitments, ollamaTranscribeMeeting, ollamaExtractCommitments, setMeetingTranscript, updateCommitment } from '@/services/api';
 import {
   Card,

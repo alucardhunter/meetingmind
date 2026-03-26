@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useI18n } from '@/i18n';
 import { useCommitments } from '@/hooks/useMeetings';
-import { CommitmentCard } from '@/components/meetings/CommitmentCard';
+import { CommitmentCard } from '@/components/commitments';
 import { Card, CardBody, Button, Spinner, Input } from '@/components/ui';
 import type { Commitment, CommitmentFilters, CommitmentStatus } from '@/types';
 import { ListTodo, Filter, X, Plus, AlertTriangle, CheckCircle2, Circle } from 'lucide-react';
@@ -225,7 +225,7 @@ export default function CommitmentsClient() {
       ) : (
         <div className="space-y-4">
           {filteredCommitments.map((c) => (
-            <CommitmentCard key={c.id} commitment={c} onToggleStatus={handleToggle} />
+            <CommitmentCard key={c.id} commitment={c} onToggleStatus={handleToggle} variant="compact" showMeetingLink />
           ))}
         </div>
       )}
