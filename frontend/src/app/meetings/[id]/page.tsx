@@ -247,7 +247,7 @@ export default function MeetingDetailPage() {
                 </>
               )}
             </div>
-            <div className="flex items-center gap-4 text-slate-500 flex-wrap">
+            <div className="flex items-center gap-4 text-slate-500 dark:text-slate-300 flex-wrap">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 <span>
@@ -279,7 +279,7 @@ export default function MeetingDetailPage() {
               <FileText className="w-5 h-5 text-indigo-600" />
               Enter Transcript Manually
             </h3>
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-sm text-slate-500 dark:text-slate-300 mt-1">
               Paste or type the meeting transcript below. The Ollama extract button will use this transcript.
             </p>
           </CardHeader>
@@ -347,9 +347,9 @@ John: Let's schedule a follow-up for next week.`}
           <Card>
             <CardBody className="py-10 text-center">
               <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                <ListTodo className="w-6 h-6 text-slate-400" />
+                <ListTodo className="w-6 h-6 text-slate-400 dark:text-slate-500" />
               </div>
-              <p className="text-sm text-slate-500">{t('meetings.detail.noCommitments')}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-300">{t('meetings.detail.noCommitments')}</p>
             </CardBody>
           </Card>
         )}

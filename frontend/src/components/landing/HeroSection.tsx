@@ -38,7 +38,7 @@ export function HeroSection() {
               {t('landing.hero.secondaryCta')}
             </Button>
           </div>
-          <div className="mt-12 flex items-center justify-center gap-8 text-sm text-slate-500">
+          <div className="mt-12 flex items-center justify-center gap-8 text-sm text-slate-500 dark:text-slate-300">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-green-500" />
               <span>No credit card required</span>
@@ -101,7 +101,7 @@ export function HeroSection() {
                         <p className={`text-sm font-medium ${c.status === 'fulfilled' ? 'text-slate-500 line-through' : 'text-white'}`}>
                           {c.text}
                         </p>
-                        <p className="text-xs text-slate-400">{c.contact} · {c.deadline}</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-300">{c.contact} · {c.deadline}</p>
                       </div>
                     </div>
                   </div>

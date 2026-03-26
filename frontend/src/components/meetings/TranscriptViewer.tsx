@@ -79,7 +79,7 @@ export function TranscriptViewer({ transcript }: TranscriptViewerProps) {
       {segments.map((segment, index) => (
         <div key={index} className="flex gap-3 py-2 hover:bg-slate-50 rounded-lg px-2">
           {segment.start > 0 && (
-            <span className="text-xs text-slate-400 font-mono flex-shrink-0 mt-0.5 w-16">
+            <span className="text-xs text-slate-400 dark:text-slate-300 font-mono flex-shrink-0 mt-0.5 w-16">
               {formatTime(segment.start)}
             </span>
           )}

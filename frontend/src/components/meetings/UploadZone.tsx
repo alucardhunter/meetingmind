@@ -104,7 +104,7 @@ export function UploadZone({
             <p className="text-lg font-medium text-slate-900">
               {selectedFile?.name || 'Recording ready'}
             </p>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-300">
               {selectedFile && `${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`}
               {recordingBlob && 'Recording captured'}
             </p>
@@ -131,7 +131,7 @@ export function UploadZone({
 
       <div className="flex items-center gap-4">
         <div className="flex-1 h-px bg-slate-200" />
-        <span className="text-sm text-slate-500">or</span>
+        <span className="text-sm text-slate-500 dark:text-slate-300">or</span>
         <div className="flex-1 h-px bg-slate-200" />
       </div>
 

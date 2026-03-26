@@ -145,7 +145,7 @@ export default function DashboardPage() {
           <Card>
             <CardBody className="py-12 text-center">
               <ListTodo className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-              <p className="text-slate-500 dark:text-slate-400">{t('dashboard.noCommitments')}</p>
+              <p className="text-slate-500 dark:text-slate-300">{t('dashboard.noCommitments')}</p>
               <Link href="/meetings/new" className="mt-4 inline-block">
                 <Button>{t('dashboard.quickUpload')}</Button>
               </Link>
@@ -194,7 +194,7 @@ function StatCard({
         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${colors[color]}`}>{icon}</div>
         <div>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">{value}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-300">{title}</p>
         </div>
       </CardBody>
     </Card>

@@ -19,7 +19,7 @@ export function Footer() {
               </div>
               <span className="font-bold text-xl text-white">MeetingMind</span>
             </Link>
-            <p className="text-sm text-slate-400">{t('landing.footer.tagline')}</p>
+            <p className="text-sm text-slate-400 dark:text-slate-300">{t('landing.footer.tagline')}</p>
           </div>
 
           <div>
@@ -76,7 +76,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-800 text-sm text-slate-500 text-center">
+        <div className="mt-12 pt-8 border-t border-slate-800 text-sm text-slate-400 dark:text-slate-500 text-center">
           <p>&copy; {currentYear} MeetingMind. All rights reserved.</p>
         </div>
       </div>

@@ -55,16 +55,16 @@ export function MeetingsTable({ meetings, onDelete, loading }: MeetingsTableProp
       <table className="w-full">
         <thead>
           <tr className="border-b border-slate-200">
-            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
               Meeting
             </th>
-            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
               Date
             </th>
-            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <th className="text-left py-3 px-4 text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
               Status
             </th>
-            <th className="text-right py-3 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <th className="text-right py-3 px-4 text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
               Actions
             </th>
           </tr>

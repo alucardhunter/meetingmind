@@ -71,7 +71,7 @@ export default function MeetingsPage() {
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
               {t('meetings.empty.title', 'No meetings yet')}
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-sm mx-auto">
+            <p className="text-slate-500 dark:text-slate-300 mb-6 max-w-sm mx-auto">
               {t(
                 'meetings.empty.description',
                 'Upload your first meeting recording to get started with commitment tracking.'

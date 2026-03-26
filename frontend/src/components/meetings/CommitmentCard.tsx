@@ -120,13 +120,13 @@ export function CommitmentCard({
           )}
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             {commitment.deadline && (
-              <span className="text-xs text-slate-500 flex items-center gap-1">
+              <span className="text-xs text-slate-500 dark:text-slate-300 flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 {formatDeadline(commitment.deadline)}
               </span>
             )}
             {commitment.amount && (
-              <span className="text-xs text-slate-500 flex items-center gap-1">
+              <span className="text-xs text-slate-500 dark:text-slate-300 flex items-center gap-1">
                 <DollarSign className="w-3 h-3" />
                 {commitment.amount}
               </span>

@@ -107,7 +107,7 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <h1 className="text-3xl font-bold text-slate-900 mb-8">{t('settings.title')}</h1>
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-8">{t('settings.title')}</h1>
 
       {error && <Alert variant="error" className="mb-6">{error}</Alert>}
       {success && <Alert variant="success" className="mb-6">{success}</Alert>}
@@ -115,15 +115,15 @@ export default function SettingsPage() {
       {/* Profile */}
       <Card className="mb-8">
         <CardHeader>
-          <h2 className="text-lg font-semibold text-slate-900">{t('settings.profile.title')}</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{t('settings.profile.title')}</h2>
         </CardHeader>
         <CardBody className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">{t('settings.profile.name')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('settings.profile.name')}</label>
             <Input value={user?.name || ''} disabled />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">{t('settings.profile.email')}</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t('settings.profile.email')}</label>
             <Input value={user?.email || ''} disabled />
           </div>
         </CardBody>
@@ -146,7 +146,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-slate-900">{t('settings.notifications.reminderEnabled')}</p>
-              <p className="text-sm text-slate-500">{t('settings.notifications.reminderDescription')}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-300">{t('settings.notifications.reminderDescription')}</p>
             </div>
             <button
               type="button"
@@ -194,9 +194,9 @@ export default function SettingsPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Key className="w-4 h-4 text-slate-500" />
-              <label className="text-sm font-medium text-slate-700">{t('settings.integrations.openai.title')}</label>
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('settings.integrations.openai.title')}</label>
             </div>
-            <p className="text-xs text-slate-500 mb-3">{t('settings.integrations.openai.description')}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-300 mb-3">{t('settings.integrations.openai.description')}</p>
             <div className="relative">
               <Input
                 type={showOpenAi ? 'text' : 'password'}
@@ -219,7 +219,7 @@ export default function SettingsPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <ExternalLink className="w-4 h-4 text-slate-500" />
-              <label className="text-sm font-medium text-slate-700">{t('settings.integrations.notion.title')}</label>
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('settings.integrations.notion.title')}</label>
             </div>
             <div className="space-y-3">
               <div className="relative">
@@ -251,9 +251,9 @@ export default function SettingsPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <ExternalLink className="w-4 h-4 text-slate-500" />
-              <label className="text-sm font-medium text-slate-700">{t('settings.integrations.slack.title')}</label>
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{t('settings.integrations.slack.title')}</label>
             </div>
-            <p className="text-xs text-slate-500 mb-3">{t('settings.integrations.slack.description')}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-300 mb-3">{t('settings.integrations.slack.description')}</p>
             <Input
               type="text"
               placeholder={t('settings.integrations.slack.placeholder')}

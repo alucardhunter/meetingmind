@@ -68,7 +68,7 @@ export function MeetingsList() {
         <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
           {t('dashboard.meetings.empty.title')}
         </h3>
-        <p className="text-slate-500 dark:text-slate-400 mb-4">
+        <p className="text-slate-500 dark:text-slate-300 mb-4">
           {t('dashboard.meetings.empty.description')}
         </p>
         <Link href="/meetings/new">
@@ -94,7 +94,7 @@ export function MeetingsList() {
             </div>
             <div>
               <h4 className="font-medium text-slate-900 dark:text-white">{meeting.title}</h4>
-              <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
+              <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-300">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>{meeting.date ? formatDate(meeting.date) : '—'}</span>
                 {meeting.contact && (

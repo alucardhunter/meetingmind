@@ -58,7 +58,7 @@ export function PricingSection() {
                     <span className={`text-4xl font-bold ${isPro ? 'text-white' : 'text-slate-900'}`}>
                       {planData.price}
                     </span>
-                    <span className={`text-sm ${isPro ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <span className={`text-sm ${isPro ? 'text-slate-400 dark:text-slate-300' : 'text-slate-500 dark:text-slate-300'}`}>
                       /{planData.period}
                     </span>
                   </div>

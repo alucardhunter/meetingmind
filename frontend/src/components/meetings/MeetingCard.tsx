@@ -35,7 +35,7 @@ export function MeetingCard({ meeting }: MeetingCardProps) {
             </div>
             <div>
               <h3 className="font-semibold text-slate-900">{meeting.title}</h3>
-              <div className="flex items-center gap-1.5 text-sm text-slate-500 mt-0.5">
+              <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-300 mt-0.5">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>
                   {meeting.date
@@ -68,7 +68,7 @@ export function MeetingCard({ meeting }: MeetingCardProps) {
           <div className="space-y-3">
             {meeting.summary.actionItems.length > 0 && (
               <div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">
+                <p className="text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider mb-1">
                   Action Items
                 </p>
                 <ul className="space-y-1">

@@ -209,10 +209,10 @@ export default function CommitmentsClient() {
         <Card>
           <CardBody className="py-16 text-center">
             <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <ListTodo className="w-8 h-8 text-slate-400" />
+              <ListTodo className="w-8 h-8 text-slate-400 dark:text-slate-500" />
             </div>
             <h3 className="text-lg font-semibold text-slate-900 mb-2">{t('commitments.empty.title')}</h3>
-            <p className="text-slate-500 mb-6 max-w-sm mx-auto">{t('commitments.empty.description')}</p>
+            <p className="text-slate-500 dark:text-slate-300 mb-6 max-w-sm mx-auto">{t('commitments.empty.description')}</p>
             {hasActiveFilters ? (
               <Button variant="outline" onClick={clearFilters}>{t('common.clear')} Filters</Button>
             ) : (

@@ -15,7 +15,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700 transition-colors"
+      className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700 transition-colors"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
@@ -68,7 +68,7 @@ export function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setLangOpen(!langOpen)}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-dark-700 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-dark-700 transition-colors"
                 >
                   <Globe className="w-4 h-4" />
                   <span>{supportedLocales.find((l) => l.code === locale)?.flag}</span>
@@ -98,7 +98,7 @@ export function Navbar() {
               </Link>
             </div>
 
-            <button className="md:hidden p-2 text-slate-600 dark:text-slate-400" onClick={() => setMobileOpen(!mobileOpen)}>
+            <button className="md:hidden p-2 text-slate-600 dark:text-slate-300" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -107,7 +107,7 @@ export function Navbar() {
         {mobileOpen && (
           <div className="md:hidden bg-white dark:bg-dark-900 border-t border-slate-200 dark:border-dark-700 px-4 py-4 space-y-2">
             <div className="flex items-center justify-between px-3 py-2">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Theme</span>
+              <span className="text-sm text-slate-600 dark:text-slate-300">Theme</span>
               <ThemeToggle />
             </div>
             {supportedLocales.map((l) => (
@@ -150,7 +150,7 @@ export function Navbar() {
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
                   pathname === '/dashboard'
                     ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -161,7 +161,7 @@ export function Navbar() {
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
                   pathname === '/commitments'
                     ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
                 }`}
               >
                 <ListTodo className="w-4 h-4" />
@@ -172,7 +172,7 @@ export function Navbar() {
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
                   pathname === '/meetings/new'
                     ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
                 }`}
               >
                 <Mic className="w-4 h-4" />
@@ -183,7 +183,7 @@ export function Navbar() {
                 className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl transition-colors ${
                   pathname === '/settings'
                     ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-dark-700'
                 }`}
               >
                 <Settings className="w-4 h-4" />
@@ -196,7 +196,7 @@ export function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setLangOpen(!langOpen)}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-dark-700 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-dark-700 transition-colors"
                 >
                   <Globe className="w-4 h-4" />
                   <span>{supportedLocales.find((l) => l.code === locale)?.flag}</span>
@@ -218,14 +218,14 @@ export function Navbar() {
                   </div>
                 )}
               </div>
-              <span className="text-sm text-slate-600 dark:text-slate-400">{user?.name}</span>
+              <span className="text-sm text-slate-600 dark:text-slate-300">{user?.name}</span>
               <Button variant="ghost" size="sm" onClick={logout}>
                 <LogOut className="w-4 h-4 mr-1" />
                 {t('nav.logout')}
               </Button>
             </div>
 
-            <button className="md:hidden p-2 text-slate-600 dark:text-slate-400" onClick={() => setMobileOpen(!mobileOpen)}>
+            <button className="md:hidden p-2 text-slate-600 dark:text-slate-300" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -234,7 +234,7 @@ export function Navbar() {
         {mobileOpen && (
           <div className="md:hidden bg-white dark:bg-dark-900 border-t border-slate-200 dark:border-dark-700 px-4 py-4 space-y-2">
             <div className="flex items-center justify-between px-3 py-2">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Theme</span>
+              <span className="text-sm text-slate-600 dark:text-slate-300">Theme</span>
               <ThemeToggle />
             </div>
             <Link href="/dashboard" className="block">
@@ -262,7 +262,7 @@ export function Navbar() {
               </Button>
             </Link>
             <div className="pt-2 border-t border-slate-200 dark:border-dark-700">
-              <p className="text-sm text-slate-600 dark:text-slate-400 px-3 mb-2">{user?.name}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300 px-3 mb-2">{user?.name}</p>
               <Button variant="ghost" size="sm" className="w-full justify-start" onClick={logout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 {t('nav.logout')}
