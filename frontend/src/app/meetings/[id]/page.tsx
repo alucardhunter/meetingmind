@@ -24,8 +24,6 @@ import {
   Send,
   ArrowLeft,
   ListTodo,
-  CalendarDays,
-  DollarSign,
   Play,
   FileText,
   X,
@@ -381,61 +379,6 @@ John: Let's schedule a follow-up for next week.`}
           </div>
         </CardBody>
       </Card>
-
-      {/* Summary Cards */}
-      {meeting.summary && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {/* Dates */}
-          {meeting.summary.dates.length > 0 && (
-            <Card>
-              <CardHeader className="flex flex-row items-center gap-2 pb-3">
-                <CalendarDays className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-semibold text-slate-900">{t('meetings.detail.dates')}</h3>
-              </CardHeader>
-              <CardBody>
-                <ul className="space-y-3">
-                  {meeting.summary.dates.map((d) => (
-                    <li key={d.id} className="flex items-start gap-3">
-                      <div className="w-5 h-5 bg-indigo-100 rounded flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs">📅</span>
-                      </div>
-                      <div>
-                        <span className="text-sm font-medium text-slate-900">{d.date}</span>
-                        <span className="text-sm text-slate-500 ml-2">{d.context}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </CardBody>
-            </Card>
-          )}
-
-          {/* Amounts */}
-          {meeting.summary.amounts.length > 0 && (
-            <Card>
-              <CardHeader className="flex flex-row items-center gap-2 pb-3">
-                <DollarSign className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-semibold text-slate-900">{t('meetings.detail.amounts')}</h3>
-              </CardHeader>
-              <CardBody>
-                <ul className="space-y-3">
-                  {meeting.summary.amounts.map((a) => (
-                    <li key={a.id} className="flex items-start gap-3">
-                      <div className="w-5 h-5 bg-green-100 rounded flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs">💰</span>
-                      </div>
-                      <div>
-                        <span className="text-sm font-semibold text-slate-900">{a.amount}</span>
-                        <span className="text-sm text-slate-500 ml-2">{a.context}</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </CardBody>
-            </Card>
-          )}
-        </div>
-      )}
 
       {/* Transcript */}
       <Card>
