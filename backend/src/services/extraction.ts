@@ -1,10 +1,6 @@
-import OpenAI from 'openai';
 import prisma from '../lib/prisma';
 import { Prisma } from '@prisma/client';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { extractCommitmentsWithOllama, extractCommitmentsWithRegex as ollamaExtractCommitmentsWithRegex } from './ollamaExtraction';
 
 export interface MeetingSummary {
   actionItems: string[];
@@ -93,50 +89,33 @@ function parseAmount(amountText: string): { value: string; currency: string } {
   return { currency: '$', value: amountText.replace(/[^\d.]/g, '') };
 }
 
-async function extractCommitmentsWithGPT(
+async function extractCommitmentsWithOllamaAdapter(
   transcript: string
 ): Promise<ExtractedCommitment[]> {
   try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        {
-          role: 'system',
-          content: `You are a meeting assistant. Analyze this transcript and extract ALL commitments made by anyone in the meeting. A commitment is any promise, agreement, or task someone explicitly says they will do.
-
-Return ONLY valid JSON with this exact structure (no markdown, no explanation):
-{
-  "commitments": [
-    {
-      "text": "the exact commitment text",
-      "deadline": "YYYY-MM-DD or null if no deadline mentioned",
-      "amountValue": "number as string or null if no dollar amount",
-      "amountCurrency": "$ or € or £ or null",
-      "owner": "name of person who made the commitment or null"
-    }
-  ]
-}`,
-        },
-        {
-          role: 'user',
-          content: transcript,
-        },
-      ],
-      temperature: 0.3,
-      max_tokens: 3000,
-    });
-
-    const content = completion.choices[0]?.message?.content;
-    if (content) {
-      const parsed = JSON.parse(content);
-      return parsed.commitments || [];
-    }
-    return [];
-  } catch (error) {
-    // GPT extraction error — return empty array
-    return [];
+    const result = await extractCommitmentsWithOllama(transcript);
+    return result.commitments.map((c) => ({
+      text: c.text,
+      deadline: c.deadline ? new Date(c.deadline) : null,
+      amountValue: c.amount ? new Prisma.Decimal(c.amount.toString()) : null,
+      amountCurrency: c.amount ? '$' : null,
+      owner: c.owner || null,
+    }));
+  } catch {
+    // Ollama extraction failed — fall back to regex
+    const result = ollamaExtractCommitmentsWithRegex(transcript);
+    return result.map((c) => ({
+      text: c.text,
+      deadline: c.deadline ? new Date(c.deadline) : null,
+      amountValue: c.amount ? new Prisma.Decimal(c.amount.toString()) : null,
+      amountCurrency: c.amount ? '$' : null,
+      owner: c.owner || null,
+    }));
   }
 }
+
+// Alias for backward compatibility
+const extractCommitmentsWithGPT = extractCommitmentsWithOllamaAdapter;
 
 async function extractCommitmentsWithRegex(
   transcript: string
@@ -207,13 +186,8 @@ export const summarizeMeeting = async (meetingId: string): Promise<void> => {
 
   const transcript = meeting.transcript;
 
-  // Get commitments from GPT
-  let commitments = await extractCommitmentsWithGPT(transcript);
-
-  // If GPT failed or returned too few, fall back to regex
-  if (commitments.length === 0) {
-    commitments = await extractCommitmentsWithRegex(transcript);
-  }
+  // Get commitments from Ollama (with regex fallback)
+  const commitments = await extractCommitmentsWithOllamaAdapter(transcript);
 
   const now = new Date();
 
@@ -283,13 +257,8 @@ export const extractCommitments = async (meetingId: string): Promise<ExtractedCo
 
   const transcript = meeting.transcript;
 
-  // Get commitments from GPT
-  let commitments = await extractCommitmentsWithGPT(transcript);
-
-  // If GPT failed or returned too few, fall back to regex
-  if (commitments.length === 0) {
-    commitments = await extractCommitmentsWithRegex(transcript);
-  }
+  // Get commitments from Ollama (with regex fallback)
+  const commitments = await extractCommitmentsWithOllamaAdapter(transcript);
 
   return commitments;
 };

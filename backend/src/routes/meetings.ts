@@ -4,10 +4,7 @@ import path from 'path';
 import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { authenticate, AuthRequest } from '../middleware/auth';
-import { transcribeMeeting, getTranscript } from '../services/transcription';
 import { summarizeMeeting, getSummary, extractCommitments } from '../services/extraction';
-import { transcribeAudio } from '../services/mockTranscription';
-import { extractCommitments as extractMockCommitments } from '../services/mockCommitmentExtraction';
 import { transcribeWithOllama } from '../services/ollamaTranscription';
 import { extractCommitmentsWithOllama } from '../services/ollamaExtraction';
 
@@ -283,58 +280,26 @@ router.post('/:id/transcribe', async (req: AuthRequest, res: Response) => {
       return;
     }
 
-    transcribeMeeting(id)
-      .then(() => {
-        console.log(`Transcription complete for meeting ${id}`);
-      })
-      .catch((error) => {
-        console.error(`Transcription failed for meeting ${id}:`, error);
-      });
-
-    res.json({ message: 'Transcription started', meetingId: id });
-  } catch (error) {
-    console.error('Transcribe error:', error);
-    res.status(500).json({ error: 'Failed to start transcription' });
-  }
-});
-
-// POST /:id/mock-transcribe — mock transcription using mockTranscription service
-router.post('/:id/mock-transcribe', async (req: AuthRequest, res: Response) => {
-  try {
-    const userId = req.userId;
-    const { id } = req.params;
-
-    const meeting = await prisma.meeting.findFirst({
-      where: {
-        id,
-        userId,
-      },
-    });
-
-    if (!meeting) {
-      res.status(404).json({ error: 'Meeting not found' });
-      return;
-    }
-
-    // Use mock transcription service
-    const transcript = await transcribeAudio(meeting.audioUrl || '');
+    // Use Ollama transcription
+    const result = await transcribeWithOllama(meeting.audioUrl || '', id);
 
     await prisma.meeting.update({
       where: { id },
       data: {
-        transcript,
+        transcript: result.transcript,
         status: 'transcribed',
       },
     });
 
-    res.json({ message: 'Mock transcription complete', meetingId: id, transcript });
+    res.json({ message: 'Transcription complete', meetingId: id, transcript: result.transcript, source: result.source });
   } catch (error) {
-    console.error('Mock transcribe error:', error);
-    res.status(500).json({ error: 'Failed to mock transcribe' });
+    console.error('Transcribe error:', error);
+    const message = error instanceof Error ? error.message : 'Failed to transcribe';
+    res.status(500).json({ error: message });
   }
 });
 
-// POST /:id/extract — mock commitment extraction using mockCommitmentExtraction service
+// POST /:id/extract — Ollama commitment extraction
 router.post('/:id/extract', async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId;
@@ -357,8 +322,8 @@ router.post('/:id/extract', async (req: AuthRequest, res: Response) => {
       return;
     }
 
-    // Use mock commitment extraction service
-    const mockCommitments = await extractMockCommitments(meeting.transcript);
+    // Use Ollama extraction service
+    const result = await extractCommitmentsWithOllama(meeting.transcript);
 
     const now = new Date();
 
@@ -367,8 +332,8 @@ router.post('/:id/extract', async (req: AuthRequest, res: Response) => {
       where: { meetingId: id },
     });
 
-    // Create new commitments from mock extraction
-    const commitmentData = mockCommitments.map((c) => ({
+    // Create new commitments from Ollama extraction
+    const commitmentData = result.commitments.map((c) => ({
       meetingId: id,
       text: c.text,
       deadline: c.deadline ? new Date(c.deadline) : null,
@@ -392,7 +357,7 @@ router.post('/:id/extract', async (req: AuthRequest, res: Response) => {
       },
     });
 
-    res.json({ message: 'Mock commitment extraction complete', meetingId: id, commitments: mockCommitments });
+    res.json({ message: 'Commitment extraction complete', meetingId: id, commitments: result.commitments });
   } catch (error) {
     console.error('Extract error:', error);
     res.status(500).json({ error: 'Failed to extract commitments' });
