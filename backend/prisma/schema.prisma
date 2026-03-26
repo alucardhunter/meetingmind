@@ -23,7 +23,7 @@ model Meeting {
   title       String
   client      String?      // NEW: links commitments across meetings
   meetingDate DateTime?
-  audioUrl    String?
+  audioUrl    String?      // audio only, extracted from video if needed
   transcript  String?      @db.Text
   summary     Json?        // legacy: raw summary blob
   status      String       @default("pending")

@@ -1,12 +1,14 @@
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { summarizeMeeting, getSummary, extractCommitments } from '../services/extraction';
 import { transcribeWithOllama } from '../services/ollamaTranscription';
 import { extractCommitmentsWithOllama } from '../services/ollamaExtraction';
+import { extractAudioFromVideo, deleteFile } from '../services/videoExtractor';
 
 const router = Router();
 
@@ -50,25 +52,46 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
-  const allowedMimes = [
+  const allowedAudioMimes = [
     'audio/mpeg',
     'audio/mp3',
     'audio/wav',
     'audio/m4a',
     'audio/x-m4a',
-    'audio/mp4',
     'audio/aac',
     'audio/ogg',
-    'audio/webm',
     'audio/opus',
   ];
 
-  if (allowedMimes.includes(file.mimetype)) {
+  const allowedVideoMimes = [
+    'video/mp4',
+    'video/quicktime',   // .mov
+    'video/x-matroska',  // .mkv
+    'video/avi',
+    'video/webm',
+  ];
+
+  const allAllowedMimes = [...allowedAudioMimes, ...allowedVideoMimes];
+
+  if (allAllowedMimes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only audio files are allowed.'));
+    cb(new Error('Invalid file type. Only audio and video files are allowed.'));
   }
 };
+
+// Video mime types that require audio extraction
+const videoMimesThatNeedExtraction = [
+  'video/mp4',
+  'video/quicktime',
+  'video/x-matroska',
+  'video/avi',
+  'video/webm',
+];
+
+function isVideoFile(mimetype: string): boolean {
+  return videoMimesThatNeedExtraction.includes(mimetype);
+}
 
 const upload = multer({
   storage,
@@ -163,7 +186,52 @@ router.post('/', upload.single('audio'), async (req: AuthRequest, res: Response)
       return;
     }
 
-    const audioUrl = req.file ? path.join(uploadDir, req.file.filename) : null;
+    let audioUrl: string | null = null;
+    
+    if (req.file) {
+      const uploadedFile = req.file;
+      const uploadedPath = path.join(uploadDir, uploadedFile.filename);
+      
+      // Check if uploaded file is a video that needs audio extraction
+      if (isVideoFile(uploadedFile.mimetype)) {
+        console.log(`[meetings] Video file detected: ${uploadedFile.originalname} (${uploadedFile.mimetype})`);
+        
+        // Generate output path for audio (use .wav extension)
+        const audioFilename = `audio-${Date.now()}-${Math.round(Math.random() * 1e9)}.wav`;
+        const audioPath = path.join(uploadDir, audioFilename);
+        
+        try {
+          // Extract audio from video
+          await extractAudioFromVideo(uploadedPath, audioPath);
+          
+          // Delete the original video file to save storage
+          try {
+            await deleteFile(uploadedPath);
+          } catch (deleteErr) {
+            console.warn(`[meetings] Could not delete original video file:`, deleteErr);
+          }
+          
+          audioUrl = audioPath;
+          console.log(`[meetings] Video → audio extraction complete, stored: ${audioUrl}`);
+        } catch (extractErr) {
+          console.error(`[meetings] Audio extraction failed:`, extractErr);
+          
+          // Fall back to keeping the original file if it's audio (video already filtered out)
+          // If extraction failed for a video, we still have the original video file as a fallback
+          if (uploadedFile.mimetype.startsWith('audio/')) {
+            audioUrl = uploadedPath;
+          } else {
+            // Try to keep the original even if it's video - transcription service might handle it
+            audioUrl = uploadedPath;
+            console.warn(`[meetings] Extraction failed, using original file: ${audioUrl}`);
+          }
+        }
+      } else {
+        // Regular audio file, use as-is
+        audioUrl = uploadedPath;
+      }
+    }
+    
     const parsedDate = date || meetingDate;
     const parsedClient = contact || client;
 
